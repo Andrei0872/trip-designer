@@ -1,0 +1,50 @@
+version: '3.9'
+
+services:
+
+  db:
+    image: postgres:14.2
+    environment:
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_DB: "${POSTGRES_DB}"
+    restart: on-failure
+    healthcheck:
+      test: "psql -U ${POSTGRES_USER} -d ${POSTGRES_DB} -c 'select 1;'"
+      interval: 1s
+      retries: 20
+    volumes:
+      - database_trip_designer_dev:/var/lib/postgresql/data
+    networks:
+      - trip_designer_dev
+
+  server:
+    build:
+      context: ./server/
+      dockerfile: .docker/Dockerfile.dev
+    environment:
+      NODE_ENV: development
+      DB_HOST: db
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_DB: "${POSTGRES_DB}"
+    volumes:
+      - $PWD/server:/app
+      # Don't want to use the `node_modules` from the working tree,
+      # but the one which has been created in the container, due to
+      # `npm i`.
+      - /app/node_modules
+    command: npm run dev
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - trip_designer_dev
+
+volumes:
+  database_trip_designer_dev:
+
+networks:
+  trip_designer_dev:
