@@ -38,3 +38,24 @@ docker-compose -f docker-compose.yml --env-file ./server/.env up
 ```bash
 cd client && npm run start
 ```
+
+---
+
+## Visualizing the database with `pgadmin`
+
+* type in `localhost` in the URL bar
+* type in the **email** and **password**; they must correspond with the values from the `docker-compose.yml` file
+* add a new connection
+* for the **hostname**, use the **name of the container**; that can found with `docker ps`
+
+  <div style="text-align: center;">
+    <img src="./screenshots/pgadmin.png">
+  </div>
+
+* for the **username** and the **password**, use the values from the `.env` file
+
+This is `pgadmin` in action:
+
+<div style="text-align: center;">
+  <img src="./screenshots/pgadmin-in-action.png">
+</div>
