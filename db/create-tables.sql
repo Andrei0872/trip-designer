@@ -29,6 +29,8 @@ CONSTRAINT fk_trip_id FOREIGN KEY(trip_id) REFERENCES trip(id) ON DELETE CASCADE
 
 CREATE TABLE activity (
 id INT PRIMARY KEY,
+name VARCHAR(50) NOT NULL,
+description VARCHAR(150),
 category category[] NOT NULL,
 city VARCHAR(30) NOT NULL,
 country VARCHAR(30) NOT NULL
