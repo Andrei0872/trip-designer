@@ -26,3 +26,34 @@
   }
 }
 
+.activities-list {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  padding-block-start: 2rem;
+
+  &__title {
+    text-align: center;
+  }
+
+  &__body {
+    list-style: none;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+    // It's the height of the entire section.
+    max-height: 69vh;
+    row-gap: 2.5rem;
+    padding-block-start: 1rem;
+  }
+
+  &__activity {
+    width: 80%;
+    text-align: center;
+    padding-block: .9rem;
+    border: 3px solid darkblue;
+    border-radius: 6px;
+  }
+}
