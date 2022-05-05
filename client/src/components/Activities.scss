@@ -1,0 +1,28 @@
+.activities {
+  // TODO: temporary
+  border: 1px solid black;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.categories {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 1rem 2rem;
+  list-style: none;
+  padding: .5rem;
+
+  &__category {
+    border: 1px solid aqua;
+    padding: .4rem .6rem;
+    border-radius: 5px;
+    cursor: pointer;
+
+    &:hover, &--selected {
+      background-color: aliceblue;
+    }
+  }
+}
+
