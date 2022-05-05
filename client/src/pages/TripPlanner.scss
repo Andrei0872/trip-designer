@@ -1,0 +1,16 @@
+.trip-planner {
+  display: flex;
+  flex-direction: column;
+  
+  &__header {
+    padding: 2rem;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__body {
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+    flex-grow: 1;
+  }
+}
