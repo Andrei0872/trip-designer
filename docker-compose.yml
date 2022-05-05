@@ -21,6 +21,15 @@ services:
     ports:
       - "5432:5432"
 
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: foo@bar.com
+      PGADMIN_DEFAULT_PASSWORD: "${POSTGRES_PASSWORD}"
+    ports:
+      - "80:80"
+    volumes:
+      - database_trip_designer_pgadmin:/var/lib/pgadmin
     networks:
       - trip_designer_dev
 
@@ -51,6 +60,7 @@ services:
 
 volumes:
   database_trip_designer_dev:
+  database_trip_designer_pgadmin:
 
 networks:
   trip_designer_dev:
