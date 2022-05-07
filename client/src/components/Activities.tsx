@@ -44,20 +44,22 @@ const ActivitiesList: React.FC<{ activities: string[] | null }> = (props) => {
   const { activities } = props;
   
   return (
-    <div className="activities-list">
-      <h2 className='activities-list__title'>Activities</h2>
-      
-      {
-        activities && activities.length
-          ? <ul className='activities-list__body'>
+    <div className="activities-wrapper">
+      <div className="activities-list">
+        <h2 className='activities-list__title'>Activities</h2>
+
+        {
+          activities && activities.length
+            ? <ul className='activities-list__body'>
               {
                 activities.map(
                   a => <li className='activities-list__activity' key={a}>{a}</li>
                 )
               }
             </ul>
-          : 'No activities yet.'
-      }
+            : 'No activities yet.'
+        }
+      </div>
     </div>
   )
 }

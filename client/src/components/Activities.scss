@@ -26,11 +26,16 @@
   }
 }
 
+// This is a scrollable flex container.
+// It was a bit tricky to make it scrollable, since it doesn't have a fixed height.
+// Luckily, I found the solution here: https: //codepen.io/neilff/pen/myNdpr.
 .activities-list {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   padding-block-start: 2rem;
+  position: absolute;
+  inset: 0;
 
   &__title {
     text-align: center;
@@ -43,10 +48,8 @@
     flex-direction: column;
     align-items: center;
     overflow-y: auto;
-    // It's the height of the entire section.
-    max-height: 69vh;
     row-gap: 2.5rem;
-    padding-block-start: 1rem;
+    padding-block: 1rem;
   }
 
   &__activity {
@@ -56,4 +59,9 @@
     border: 3px solid darkblue;
     border-radius: 6px;
   }
+}
+
+.activities-wrapper {
+  position: relative;
+  flex-grow: 1;
 }
