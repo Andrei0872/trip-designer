@@ -10,16 +10,26 @@ import { TypeOfFirstArg } from "../types/utils";
 type OnSelectedCategories = (selectedCategories: { [k: string]: boolean }) => void;
 type SelectedCategories = TypeOfFirstArg<OnSelectedCategories>;
 
+const ALL_CATEGORIES_LABEL = 'all';
+
 const Categories: React.FC<{ categories: string[], onSelectedCategories: OnSelectedCategories }> = (props) => {
   const { categories, onSelectedCategories } = props;
 
   const [selectedCategories, setSelectedCategories] = useState<{ [k: string]: boolean }>({});
+
+  const areAllSelected = categories.filter(c => selectedCategories[c]).length === categories.length;
   
   const selectCategory = (cat: string) => {
-    const newSelectedCategories = {
-      ...selectedCategories,
-      [cat]: !selectedCategories[cat]
-    };
+    let newSelectedCategories;
+    
+    if (cat === ALL_CATEGORIES_LABEL) {
+      newSelectedCategories = categories.reduce((selectedCategories: { [k: string]: boolean }, crtCat) => (selectedCategories[crtCat] = true, selectedCategories), {})
+    } else {
+      newSelectedCategories = {
+        ...selectedCategories,
+        [cat]: !selectedCategories[cat]
+      };
+    }
 
     setSelectedCategories(newSelectedCategories);
     onSelectedCategories(newSelectedCategories);
@@ -27,6 +37,13 @@ const Categories: React.FC<{ categories: string[], onSelectedCategories: OnSelec
 
   return (
     <ul className="categories">
+      <li
+        onClick={() => selectCategory(ALL_CATEGORIES_LABEL)}
+        className={`categories__category ${areAllSelected ? 'categories__category--selected' : ''}`}
+        key='all'
+      >
+        all
+      </li>
       {categories.map(c => (
         <li
           className={`categories__category ${selectedCategories[c] ? 'categories__category--selected' : ''}`}
