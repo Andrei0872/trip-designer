@@ -1,0 +1,45 @@
+.daily-planner {
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+}
+
+.days-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 3rem;
+}
+
+.days {
+  list-style: none;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  border-bottom: 1px solid black;
+  overflow-x: auto;
+  position: absolute;
+  inset: 0;
+
+  &__day {
+    display: flex;
+    place-items: center;
+    cursor: pointer;
+    padding-inline: 1rem;
+
+    & > span {
+      width: max-content;
+    }
+
+    &--selected, &:hover {
+      background-color: antiquewhite;
+    }
+
+    &:not(:last-child) {
+      border-right: 1px solid darkcyan;
+    }
+  }
+}
+
+.day-activities {
+  flex-grow: 1;
+}
