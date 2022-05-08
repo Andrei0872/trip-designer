@@ -6,6 +6,7 @@ import { useState } from "react";
 import { fetchActivitiesByCategories, fetchCategories } from "../api/activities";
 import { Activity } from "../types/activity";
 import { TypeOfFirstArg } from "../types/utils";
+import { useCategories } from '../context/categories';
 
 type OnSelectedCategories = (selectedCategories: { [k: string]: boolean }) => void;
 type SelectedCategories = TypeOfFirstArg<OnSelectedCategories>;
@@ -70,7 +71,7 @@ const ActivitiesList: React.FC<{ activities: string[] | null }> = (props) => {
             ? <ul className='activities-list__body'>
               {
                 activities.map(
-                  a => <li className='activities-list__activity' key={a}>{a}</li>
+                  a => <li draggable='true' className='activities-list__activity' key={a}>{a}</li>
                 )
               }
             </ul>
@@ -82,15 +83,12 @@ const ActivitiesList: React.FC<{ activities: string[] | null }> = (props) => {
 }
 
 function Activities () {
-  const [categories, setCategories] = useState<string[] | null>(null);
   const [activities, setActivities] = useState<string[] | null>(null);
   const [selectedCategoriesMap, setSelectedCategoriesMap] = useState<SelectedCategories>({});
 
-  const selectedCategories = useMemo(() => categories?.filter(c => selectedCategoriesMap[c]), [selectedCategoriesMap]);
+  const categories = useCategories();
 
-  useEffect(() => {
-    fetchCategories().then(c => setCategories(c));
-  }, []);
+  const selectedCategories = useMemo(() => categories?.filter(c => selectedCategoriesMap[c]), [selectedCategoriesMap]);
 
   useEffect(() => {
     if (!selectedCategories) {
