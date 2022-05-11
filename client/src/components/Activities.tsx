@@ -7,6 +7,7 @@ import { fetchActivitiesByCategories, fetchCategories } from "../api/activities"
 import { Activity } from "../types/activity";
 import { TypeOfFirstArg } from "../types/utils";
 import { useCategories } from '../hooks/useCategories';
+import { useActivities } from '../context/activities';
 
 type OnSelectedCategories = (selectedCategories: { [k: string]: boolean }) => void;
 type SelectedCategories = TypeOfFirstArg<OnSelectedCategories>;
@@ -83,9 +84,9 @@ const ActivitiesList: React.FC<{ activities: string[] | null }> = (props) => {
 }
 
 function Activities () {
-  const [activities, setActivities] = useState<string[] | null>(null);
   const [selectedCategoriesMap, setSelectedCategoriesMap] = useState<SelectedCategories>({});
-
+  const { activities, setActivities } = useActivities();
+  
   const categories = useCategories();
 
   const selectedCategories = useMemo(() => categories?.filter(c => selectedCategoriesMap[c]), [selectedCategoriesMap]);
