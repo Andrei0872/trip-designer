@@ -6,7 +6,7 @@ import { useState } from "react";
 import { fetchActivitiesByCategories, fetchCategories } from "../api/activities";
 import { Activity } from "../types/activity";
 import { TypeOfFirstArg } from "../types/utils";
-import { useCategories } from '../context/categories';
+import { useCategories } from '../hooks/useCategories';
 
 type OnSelectedCategories = (selectedCategories: { [k: string]: boolean }) => void;
 type SelectedCategories = TypeOfFirstArg<OnSelectedCategories>;

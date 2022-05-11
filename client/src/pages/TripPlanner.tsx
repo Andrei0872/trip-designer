@@ -3,7 +3,6 @@ import './TripPlanner.scss'
 import Activities from "../components/Activities"
 import DailyPlanner from "../components/DailyPlanner"
 import Details from "../components/Details"
-import { CategoriesProvider } from '../context/categories'
 
 function TripPlanner () {
   return (
@@ -14,10 +13,8 @@ function TripPlanner () {
 
       <div className="trip-planner__body">
         <Details />
-        <CategoriesProvider>
-          <DailyPlanner />
-          <Activities />
-        </CategoriesProvider>
+        <DailyPlanner />
+        <Activities />
       </div>
     </section>
   )
