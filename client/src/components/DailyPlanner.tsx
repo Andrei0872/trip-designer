@@ -55,7 +55,7 @@ const DayActivities: React.FC<DayActivitiesProps> = (props) => {
       activities.length
         ? activities.map(
           (a, i) => 
-            <li data-index={i} key={a.activityId + ':' + a.dayNumber + ':' + i} className='day-activities__activity'>
+            <li data-index={i + 1} key={a.activityId + ':' + a.dayNumber + ':' + i} className='day-activities__activity'>
               <div className='day-activities__hours'><input size={5} maxLength={5} type="text" placeholder='HH:mm' value={a.hours} onChange={(ev) => onActivityUpdated({ ...a, hours: ev.target.value })} /></div>
               <div>{a.activityName}</div>
               <textarea rows={3} className='day-activities__note' value={a.note} onChange={(ev) => onActivityUpdated({ ...a, note: ev.target.value })} placeholder='Add a note'></textarea>

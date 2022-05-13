@@ -68,7 +68,7 @@
     position: relative;
 
     &::after {
-      content: '1';
+      content: attr(data-index);
       position: absolute;
       width: 2rem;
       height: 2rem;
