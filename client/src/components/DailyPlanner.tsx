@@ -79,6 +79,9 @@ interface DayActivity {
   dayNumber: number;
   hours: string;
   note: string;
+  // Because the same activity might be added to the same day or to different days, 
+  // we need a way to distinguish the activities and we do that with help of the property below.
+  dayActivityId: string;
 };
 
 type DayActivitiesState = DayActivity[];
@@ -88,7 +91,7 @@ type DayActivitiesAction =
   | { type: 'remove' } & DayActivity
   | { type: 'update' } & DayActivity;
 
-const isTheSameActivity = (a: DayActivity, aTest: DayActivity) => a.activityId === aTest.activityId && a.dayNumber === aTest.dayNumber;
+const isTheSameActivity = (a: DayActivity, aTest: DayActivity) => a.dayActivityId === aTest.dayActivityId;
 
 const dailyActivitiesReducer = (state: DayActivitiesState, action: DayActivitiesAction): DayActivitiesState => {
   const { type } = action;
@@ -128,6 +131,7 @@ const dayActivityCreateDefault = (options?: Partial<DayActivity>): DayActivity =
   hours: '',
   note: '',
   dayNumber: 0,
+  dayActivityId: Math.random().toString(36).slice(2, 7),
   ...options,
 });
 
