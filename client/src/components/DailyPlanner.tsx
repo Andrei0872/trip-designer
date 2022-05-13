@@ -50,6 +50,7 @@ const DayActivities: React.FC<DayActivitiesProps> = (props) => {
     onDragOver={e => e.preventDefault()}
     onDrop={onActivityDropped}
     className='day-activities'
+    data-is-empty={activities.length === 0}
   >
     {
       activities.length

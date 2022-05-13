@@ -50,7 +50,7 @@
   position: relative;
   --left-space: 6.1rem;
 
-  &::after {
+  &:not([data-is-empty='true'])::after {
     content: '';
     position: absolute;
     height: 100%;
