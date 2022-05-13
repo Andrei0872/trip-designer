@@ -1,3 +1,5 @@
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { DragEventHandler, SyntheticEvent, useMemo, useReducer, useState } from 'react';
 import { useActivities } from '../context/activities';
 import './DailyPlanner.scss'
@@ -38,10 +40,11 @@ type OnActivityDropped = DragEventHandler<any>;
 interface DayActivitiesProps {
   onActivityDropped: OnActivityDropped;
   onActivityUpdated: (a: DayActivity) => void;
+  onActivityDeleted: (a: DayActivity) => void;
   activities: DayActivity[];
 }
 const DayActivities: React.FC<DayActivitiesProps> = (props) => {
-  const { onActivityDropped, onActivityUpdated, activities } = props;
+  const { onActivityDropped, onActivityUpdated, onActivityDeleted, activities } = props;
 
   return <ul
     onDragOver={e => e.preventDefault()}
@@ -56,6 +59,11 @@ const DayActivities: React.FC<DayActivitiesProps> = (props) => {
               <div className='day-activities__hours'><input size={5} maxLength={5} type="text" placeholder='HH:mm' value={a.hours} onChange={(ev) => onActivityUpdated({ ...a, hours: ev.target.value })} /></div>
               <div>{a.activityName}</div>
               <textarea rows={3} className='day-activities__note' value={a.note} onChange={(ev) => onActivityUpdated({ ...a, note: ev.target.value })} placeholder='Add a note'></textarea>
+              <div className="day-activities__actions">
+                <button onClick={() => onActivityDeleted(a)} className='day-activities__action day-activities__action--delete'>
+                  <FontAwesomeIcon fontSize={'.9rem'} icon={faTrashCan} />
+                </button>
+              </div>
             </li>
         )
         : 'No activities for this day!'
@@ -77,8 +85,10 @@ type DayActivitiesState = DayActivity[];
 
 type DayActivitiesAction =
   | { type: 'add' } & DayActivity
-  | { type: 'remove' } 
+  | { type: 'remove' } & DayActivity
   | { type: 'update' } & DayActivity;
+
+const isTheSameActivity = (a: DayActivity, aTest: DayActivity) => a.activityId === aTest.activityId && a.dayNumber === aTest.dayNumber;
 
 const dailyActivitiesReducer = (state: DayActivitiesState, action: DayActivitiesAction): DayActivitiesState => {
   const { type } = action;
@@ -96,7 +106,13 @@ const dailyActivitiesReducer = (state: DayActivitiesState, action: DayActivities
     case 'update': {
       const { type, ...payload } = action;
 
-      return state.map(a => a.activityId === payload.activityId && a.dayNumber === payload.dayNumber ? payload : a);
+      return state.map(a => isTheSameActivity(a, payload) ? payload : a);
+    }
+
+    case 'remove': {
+      const { type, ...payload } = action;
+
+      return state.filter(a => !isTheSameActivity(a, payload));
     }
 
     default: {
@@ -144,9 +160,16 @@ function DailyPlanner () {
     });
   }
 
-  const onDayActivityChanged = (a: DayActivity) => {
+  const onDayActivityUpdated = (a: DayActivity) => {
     dispatchDailyActivitiesAction({
       type: 'update',
+      ...a
+    });
+  }
+
+  const onDayActivityDeleted = (a: DayActivity) => {
+    dispatchDailyActivitiesAction({
+      type: 'remove',
       ...a
     });
   }
@@ -157,7 +180,12 @@ function DailyPlanner () {
     <div className="daily-planner">
       <Days onSelectedDayNumber={setSelectedDayNumber} nrDays={10} />
 
-      <DayActivities activities={crtDayActivities} onActivityUpdated={onDayActivityChanged} onActivityDropped={onActivityDropped} />
+      <DayActivities
+        activities={crtDayActivities}
+        onActivityUpdated={onDayActivityUpdated}
+        onActivityDropped={onActivityDropped}
+        onActivityDeleted={onDayActivityDeleted}
+      />
     </div>
   )
 }
