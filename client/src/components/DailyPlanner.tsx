@@ -35,23 +35,33 @@ const Days: React.FC<{ nrDays: number, onSelectedDayNumber: OnSelectedDayNumber 
 }
 
 type OnActivityDropped = DragEventHandler<any>;
-const DayActivities: React.FC<{ onActivityDropped: OnActivityDropped, activities: DayActivity[] }> = (props) => {
-  const { onActivityDropped, activities } = props;
+interface DayActivitiesProps {
+  onActivityDropped: OnActivityDropped;
+  onActivityUpdated: (a: DayActivity) => void;
+  activities: DayActivity[];
+}
+const DayActivities: React.FC<DayActivitiesProps> = (props) => {
+  const { onActivityDropped, onActivityUpdated, activities } = props;
 
-  return <div
+  return <ul
     onDragOver={e => e.preventDefault()}
     onDrop={onActivityDropped}
     className='day-activities'
   >
     {
       activities.length
-        ? JSON.stringify(activities)
+        ? activities.map(
+          (a, i) => 
+            <li data-index={i} key={a.activityId + ':' + a.dayNumber + ':' + i} className='day-activities__activity'>
+              <div className='day-activities__hours'><input size={5} maxLength={5} type="text" placeholder='HH:mm' value={a.hours} onChange={(ev) => onActivityUpdated({ ...a, hours: ev.target.value })} /></div>
+              <div>{a.activityName}</div>
+              <textarea rows={3} className='day-activities__note' value={a.note} onChange={(ev) => onActivityUpdated({ ...a, note: ev.target.value })} placeholder='Add a note'></textarea>
+            </li>
+        )
         : 'No activities for this day!'
     }
-  </div>;
+  </ul>;
 }
-
-const DayActivity = () => {};
 
 interface DayActivity {
   // tripId: number;
@@ -67,8 +77,8 @@ type DayActivitiesState = DayActivity[];
 
 type DayActivitiesAction =
   | { type: 'add' } & DayActivity
-  | { type: 'remove' }
-  | { type: 'update' };
+  | { type: 'remove' } 
+  | { type: 'update' } & DayActivity;
 
 const dailyActivitiesReducer = (state: DayActivitiesState, action: DayActivitiesAction): DayActivitiesState => {
   const { type } = action;
@@ -81,6 +91,12 @@ const dailyActivitiesReducer = (state: DayActivitiesState, action: DayActivities
         ...state,
         payload,
       ]
+    }
+
+    case 'update': {
+      const { type, ...payload } = action;
+
+      return state.map(a => a.activityId === payload.activityId && a.dayNumber === payload.dayNumber ? payload : a);
     }
 
     default: {
@@ -106,6 +122,8 @@ function DailyPlanner () {
 
   const { activities } = useActivities();
 
+  const crtDayActivities = dailyActivities.filter(a => a.dayNumber === selectedDayNumber);
+
   // TODO: maybe `useCallback` to memoize `DayActivities`.
   const onActivityDropped: DragEventHandler = (ev) => {
     if (!activities) {
@@ -114,7 +132,7 @@ function DailyPlanner () {
 
     const activityId = ev.dataTransfer.getData('text');
     // TODO: adapt for Backend when the time comes.
-    const activity = activities.find(a => activityId);
+    const activity = activities.find(a => a === activityId);
 
     dispatchDailyActivitiesAction({
       type: 'add',
@@ -126,15 +144,20 @@ function DailyPlanner () {
     });
   }
 
-  const crtDayActivities = dailyActivities.filter(a => a.dayNumber === selectedDayNumber);
-  
+  const onDayActivityChanged = (a: DayActivity) => {
+    dispatchDailyActivitiesAction({
+      type: 'update',
+      ...a
+    });
+  }
+
   console.log('render');
 
   return (
     <div className="daily-planner">
       <Days onSelectedDayNumber={setSelectedDayNumber} nrDays={10} />
 
-      <DayActivities activities={crtDayActivities} onActivityDropped={onActivityDropped} />
+      <DayActivities activities={crtDayActivities} onActivityUpdated={onDayActivityChanged} onActivityDropped={onActivityDropped} />
     </div>
   )
 }
