@@ -37,18 +37,60 @@ const Days: React.FC<{ nrDays: number, onSelectedDayNumber: OnSelectedDayNumber 
 }
 
 type OnActivityDropped = DragEventHandler<any>;
+type ActivityChangedPosition = { fromActivityId: string, toActivityId: string };
 interface DayActivitiesProps {
   onActivityDropped: OnActivityDropped;
   onActivityUpdated: (a: DayActivity) => void;
   onActivityDeleted: (a: DayActivity) => void;
+  onActivityPositionChanged: (position: ActivityChangedPosition) => void;
   activities: DayActivity[];
 }
 const DayActivities: React.FC<DayActivitiesProps> = (props) => {
-  const { onActivityDropped, onActivityUpdated, onActivityDeleted, activities } = props;
+  const {
+    onActivityDropped,
+    onActivityUpdated,
+    onActivityDeleted,
+    onActivityPositionChanged,
+    activities,
+  } = props;
+
+  const [fromActivityId, setFromActivityId] = useState('');
+  const [toActivityId, setToActivityId] = useState('');
+
+  const onDrop: DragEventHandler<any> = ev => {
+    const isRearrangingDayActivities = !!fromActivityId;
+    if (!isRearrangingDayActivities) {
+      onActivityDropped(ev);
+    }
+  } 
+
+  const onPointerDown = (activityId: string) => {
+    setFromActivityId(activityId);
+  };
+
+  const onPointerEnter = (activityId: string) => {
+    setToActivityId(activityId);
+
+  };
+
+  const onPointerLeave = () => {
+    setFromActivityId('');
+    setToActivityId('');
+  };
+
+  const onPointerUp = (a: DayActivity) => {
+    const hasActivityChangedPosition = !!fromActivityId && !!toActivityId && fromActivityId !== toActivityId;
+    if (hasActivityChangedPosition) {
+      onActivityPositionChanged({ fromActivityId, toActivityId });
+    }
+    
+    setFromActivityId('');
+    setToActivityId('');
+  }
 
   return <ul
     onDragOver={e => e.preventDefault()}
-    onDrop={onActivityDropped}
+    onDrop={onDrop}
     className='day-activities'
     data-is-empty={activities.length === 0}
   >
@@ -56,7 +98,17 @@ const DayActivities: React.FC<DayActivitiesProps> = (props) => {
       activities.length
         ? activities.map(
           (a, i) => 
-            <li data-index={i + 1} key={a.activityId + ':' + a.dayNumber + ':' + i} className='day-activities__activity'>
+            <li
+              onDragEnd={() => onPointerUp(a)}
+              onPointerLeave={() => onPointerLeave()}
+              onDragEnter={() => onPointerEnter(a.dayActivityId)}
+              onDragStart={() => onPointerDown(a.dayActivityId)}
+              draggable='true'
+              data-index={i + 1}
+              key={a.activityId + ':' + a.dayNumber + ':' + i}
+              className='day-activities__activity'
+              data-has-pointer-entered={toActivityId === a.dayActivityId && fromActivityId !== a.dayActivityId}
+            >
               <div className='day-activities__hours'><input size={5} maxLength={5} type="text" placeholder='HH:mm' value={a.hours} onChange={(ev) => onActivityUpdated({ ...a, hours: ev.target.value })} /></div>
               <div>{a.activityName}</div>
               <textarea rows={3} className='day-activities__note' value={a.note} onChange={(ev) => onActivityUpdated({ ...a, note: ev.target.value })} placeholder='Add a note'></textarea>
@@ -90,7 +142,8 @@ type DayActivitiesState = DayActivity[];
 type DayActivitiesAction =
   | { type: 'add' } & DayActivity
   | { type: 'remove' } & DayActivity
-  | { type: 'update' } & DayActivity;
+  | { type: 'update' } & DayActivity
+  | { type: 'rearrange' } & ActivityChangedPosition;
 
 const isTheSameActivity = (a: DayActivity, aTest: DayActivity) => a.dayActivityId === aTest.dayActivityId;
 
@@ -117,6 +170,21 @@ const dailyActivitiesReducer = (state: DayActivitiesState, action: DayActivities
       const { type, ...payload } = action;
 
       return state.filter(a => !isTheSameActivity(a, payload));
+    }
+
+    case 'rearrange': {
+      const { type, fromActivityId, toActivityId } = action;
+
+      const newState = [...state];
+
+      const fromActivityIdx = newState.findIndex(a => a.dayActivityId === fromActivityId);
+      const toActivityIdx = newState.findIndex(a => a.dayActivityId === toActivityId);
+
+      const movedItem = newState[fromActivityIdx];
+      newState.splice(fromActivityIdx, 1);
+      newState.splice(toActivityIdx, 0, movedItem);
+
+      return newState;
     }
 
     default: {
@@ -179,13 +247,19 @@ function DailyPlanner () {
     });
   }
 
-  console.log('render');
+  const onActivityPositionChanged = (position: { fromActivityId: string, toActivityId: string }) => {
+    dispatchDailyActivitiesAction({
+      type: 'rearrange',
+      ...position,
+    });
+  }
 
   return (
     <div className="daily-planner">
       <Days onSelectedDayNumber={setSelectedDayNumber} nrDays={10} />
 
       <DayActivities
+        onActivityPositionChanged={onActivityPositionChanged}
         activities={crtDayActivities}
         onActivityUpdated={onDayActivityUpdated}
         onActivityDropped={onActivityDropped}
