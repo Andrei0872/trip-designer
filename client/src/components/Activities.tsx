@@ -1,11 +1,13 @@
 import './Activities.scss';
 
 
-import { useEffect, useMemo, useRef } from "react";
+import { DragEvent, SyntheticEvent, useEffect, useMemo, useRef } from "react";
 import { useState } from "react";
 import { fetchActivitiesByCategories, fetchCategories } from "../api/activities";
 import { Activity } from "../types/activity";
 import { TypeOfFirstArg } from "../types/utils";
+import { useCategories } from '../hooks/useCategories';
+import { useActivities } from '../context/activities';
 
 type OnSelectedCategories = (selectedCategories: { [k: string]: boolean }) => void;
 type SelectedCategories = TypeOfFirstArg<OnSelectedCategories>;
@@ -60,6 +62,11 @@ const Categories: React.FC<{ categories: string[], onSelectedCategories: OnSelec
 const ActivitiesList: React.FC<{ activities: string[] | null }> = (props) => {
   const { activities } = props;
   
+  // FIXME(BE): use `number` instead of `string`.
+  const onDragStart = (ev: DragEvent<any>, activityId: string) => {
+    ev.dataTransfer?.setData("text", activityId);
+  }
+
   return (
     <div className="activities-wrapper">
       <div className="activities-list">
@@ -70,7 +77,15 @@ const ActivitiesList: React.FC<{ activities: string[] | null }> = (props) => {
             ? <ul className='activities-list__body'>
               {
                 activities.map(
-                  a => <li className='activities-list__activity' key={a}>{a}</li>
+                  a => 
+                    <li
+                      onDragStart={ev => onDragStart(ev, a)}
+                      draggable='true'
+                      className='activities-list__activity'
+                      key={a}
+                    >
+                      {a}
+                    </li>
                 )
               }
             </ul>
@@ -82,15 +97,12 @@ const ActivitiesList: React.FC<{ activities: string[] | null }> = (props) => {
 }
 
 function Activities () {
-  const [categories, setCategories] = useState<string[] | null>(null);
-  const [activities, setActivities] = useState<string[] | null>(null);
   const [selectedCategoriesMap, setSelectedCategoriesMap] = useState<SelectedCategories>({});
+  const { activities, setActivities } = useActivities();
+  
+  const categories = useCategories();
 
   const selectedCategories = useMemo(() => categories?.filter(c => selectedCategoriesMap[c]), [selectedCategoriesMap]);
-
-  useEffect(() => {
-    fetchCategories().then(c => setCategories(c));
-  }, []);
 
   useEffect(() => {
     if (!selectedCategories) {
