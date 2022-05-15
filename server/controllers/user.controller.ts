@@ -1,5 +1,3 @@
-import { userInfo } from "os";
-
 const {JWT} = require('../token/jwt');
 const bcrypt = require('bcrypt');
 const database = require('../db');

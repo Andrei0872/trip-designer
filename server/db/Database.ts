@@ -1,5 +1,3 @@
-import { builtinModules } from "module";
-
 const { Pool }  = require('pg');
 
 class Database {
