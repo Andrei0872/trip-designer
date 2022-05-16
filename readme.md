@@ -41,6 +41,24 @@ cd client && npm run start
 
 ---
 
+## Diagrams
+  <p align="center">
+  <b>ERD</b>
+  </p>
+  <div style="text-align: center;">
+    <img src="./screenshots/ERD.png">
+  </div>
+  
+  <p align="center">
+  <b>Conceptual Diagram</b>
+  </p>
+  <div style="text-align: center;">
+    <img src="./screenshots/Conceptual-Diagram.png">
+  </div>
+
+---
+
+
 ## Visualizing the database with `pgadmin`
 
 * type in `localhost` in the URL bar
