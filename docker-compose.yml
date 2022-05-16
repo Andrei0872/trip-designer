@@ -28,6 +28,7 @@ services:
       PGADMIN_DEFAULT_PASSWORD: "${POSTGRES_PASSWORD}"
     ports:
       - "80:80"
+
     volumes:
       - database_trip_designer_pgadmin:/var/lib/pgadmin
     networks:
