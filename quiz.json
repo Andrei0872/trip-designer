@@ -1,0 +1,116 @@
+{
+    "questions":
+    [
+        {
+            "question": "What country would you like to go to?",
+            "answer" : ""
+        },
+        {
+            "question": "When would you like to go on a vacation?",
+            "answer": ""
+        },
+        {
+            "question": "What is your MAIN goal when going on vacation?",
+            "answers":
+            [
+                "Relaxation",
+                "Indulging in food",
+                "Outdoor fun",
+                "Partying with friends"
+            ],
+            "countsTowards":
+            [
+                {
+                    "index": 0,
+                    "towards": 
+                    [
+                        "indoor"
+                    ]
+                },
+                {
+                    "index": 1,
+                    "towards": 
+                    [
+                        "drinks", 
+                        "food"
+                    ]
+                },
+                {
+                    "index": 2,
+                    "towards": 
+                    [
+                        "outdoor",
+                        "sport",
+                        "experience"
+                    ]
+                },
+                {
+                    "index": 3,
+                    "towards": 
+                    [
+                        "drinks",
+                        "experience",
+                        "entertainment"
+                    ]
+                }
+            ]
+        },
+        {
+            "question": "What is your idea of the perfect vacation day?",
+            "answers":
+            [
+                "Sleeping in late",
+                "Shopping",
+                "Learning a regional sport or craft",
+                "Beat the crowds to the museums",
+                "Exploring the best food in the city"
+
+            ],
+            "countsTowards":
+            [
+                {
+                    "index": 0,
+                    "towards": 
+                    [
+                        "indoor",
+                        "food"
+                    ]
+                },
+                {
+                    "index": 1,
+                    "towards": 
+                    [
+                        "entertainment",
+                        "shopping"
+                    ]
+                },
+                {
+                    "index": 2,
+                    "towards": 
+                    [
+                        "sport",
+                        "experience",
+                        "outdoor"
+                    ]
+                },
+                {
+                    "index": 3,
+                    "towards": 
+                    [
+                        "cultural",
+                        "experience",
+                        "entertainment"
+                    ]
+                },
+                {
+                    "index": 4,
+                    "towards": 
+                    [
+                        "drinks",
+                        "food"
+                    ]
+                }
+            ]
+        }
+    ]
+}
