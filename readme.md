@@ -40,6 +40,7 @@ cd client && npm run start
 ```
 
 ---
+
 ## Diagrams
   <p align="center">
   <b>ERD</b>
@@ -56,6 +57,7 @@ cd client && npm run start
   </div>
 
 ---
+
 
 ## Visualizing the database with `pgadmin`
 

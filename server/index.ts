@@ -33,6 +33,42 @@ app.post('/save-trip',async(req, res) => {
   
   res.json({ message: 'trip sucessfully added!' })
 })
+ 
+app.get('/activities', async(req, res) => {
 
+  let rawFilter = req.query.filter as string;
+
+  let filters = rawFilter.split(',').map(a => `'${a}'`);
+ 
+  const client = await pool.connect();
+  let result;
+  try {
+    if(rawFilter == 'all')
+    { result = await client.query(`SELECT * FROM activity`);
+   
+    }
+    else{
+      result = await client.query(`SELECT * FROM activity WHERE 
+      activity.category && ARRAY[${filters}]::category[];`);
+   
+    }
+    
+  } finally {
+    // Make sure to release the client before any error handling,
+    // just in case the error handling itself throws an error.
+    client.release()
+  }
+
+  res.json({ message: 'filtering performed successfully!', 
+            data: result.rows})
+}
+);
+
+app.get('/activities-categories', async(req, res) => {
+
+  const client = await pool.connect();
+  let allCategories= await client.query('SELECT enum_range(NULL::category)');
+  res.json({data: allCategories.rows[0].enum_range.slice(1,-1).split(',')});
+});
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
