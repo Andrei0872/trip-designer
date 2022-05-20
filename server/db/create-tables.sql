@@ -1,4 +1,4 @@
-CREATE TYPE category AS ENUM ('drinks', 'food', 'cultural', 'sport', 'experience', 'entertainment', 'outdoor', 'indoor');
+CREATE TYPE category AS ENUM ('drinks', 'food', 'cultural', 'sport', 'experience', 'entertainment', 'outdoor', 'indoor','shopping');
 
 CREATE TABLE "user" (
 id SERIAL PRIMARY KEY,
