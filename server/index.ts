@@ -1,32 +1,6 @@
-import pg, { PoolClient } from 'pg';
-import express from 'express'
-
-const url = require('url');
-const querystring = require('querystring');
-
-const { Pool } = pg;
-
-const connConfig = {
-  user: process.env.POSTGRES_USER,
-  host: process.env.DB_HOST,
-  database: process.env.POSTGRES_DB,
-  password: process.env.POSTGRES_PASSWORD,
-  port: 5432,
-};
-
-const pool = new Pool(connConfig);
-
-const init = async () => {
-  try {
-    const client = await pool.connect();
-  
-    console.log('[DB]: Successfully connected.');
-  } catch (err: any) {
-    console.log(err.message);
-  }
-}
-
-init();
+const express = require('express');
+const login = require('./controllers/user.controller');
+const db = require('../db');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -35,11 +9,13 @@ app.use(express.json());
 
 app.get('/test', (req, res) => res.json({ message: 'this is a message!' }));
 
+app.use('/login', login); 
+
 app.post('/save-trip',async(req, res) => {
 
   const trip = req.body.trip;
-  const activities = req.body.activities;
-  const client = await pool.connect()
+  const activities = req.body.activities; 
+  const client = await db.getPool().connect();
   try {
     const values = Object.values(trip)
     let res = await client.query(`INSERT INTO trip(${Object.keys(trip).join(', ')}) VALUES($1, $2, $3, $4, $5) RETURNING id`, values)
