@@ -40,7 +40,7 @@ app.get('/activities', async(req, res) => {
 
   let filters = rawFilter.split(',').map(a => `'${a}'`);
  
-  const client = await pool.connect();
+  const client = await Pool.connect();
   let result;
   try {
     if(rawFilter == 'all')
@@ -66,7 +66,7 @@ app.get('/activities', async(req, res) => {
 
 app.get('/activities-categories', async(req, res) => {
 
-  const client = await pool.connect();
+  const client = await Pool.connect();
   let allCategories= await client.query('SELECT enum_range(NULL::category)');
   res.json({data: allCategories.rows[0].enum_range.slice(1,-1).split(',')});
 });
