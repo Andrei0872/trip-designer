@@ -5,10 +5,11 @@ import TripPlanner from './pages/TripPlanner';
 
 function App() {
   return (
+    // TODO: change the contents to Main page
     <div className="main">
-      <Header />
+      
       <TripPlanner />
-      <Footer />
+      
     </div>
   );
 }
