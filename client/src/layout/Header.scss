@@ -1,0 +1,51 @@
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--color-grecian-blue);
+
+    & a {
+        color: #fff;
+        text-decoration: none;
+    }
+
+    &__title {
+        font-family: 'Lobster', cursive;
+        font-size: 1.8rem;
+        padding-block: 0.5rem;
+        margin-left: 5vw;
+    }
+
+    &__tabs {
+        display: flex;
+        gap: 2.5rem;
+        list-style: none;
+        font-size: 1.3rem;
+        height: 100%;
+        align-items: center;
+        padding-inline-end: 7vw;
+    }
+
+    &__nav {
+        height: 100%;
+        display: flex;
+        align-items: center;
+    }
+
+    &__tab {
+        height: 100%;
+        display: flex;
+        place-items: center;
+
+        & > * {
+            height: 100%;
+            display: flex;
+            place-items: center;
+            padding: .5rem;
+
+            &:hover {
+                background-color: var(--color-sea);
+            }
+        }
+    }
+}
