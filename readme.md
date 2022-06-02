@@ -42,6 +42,14 @@ cd client && npm run start
 ---
 
 ## Diagrams
+
+  <p align="center">
+  <b>State Diagram</b>
+  </p>
+  <div style="text-align: center;">
+    <img src="./screenshots/State-Diagram.png">
+  </div>
+  
   <p align="center">
   <b>ERD</b>
   </p>
