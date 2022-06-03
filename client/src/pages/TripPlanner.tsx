@@ -10,6 +10,8 @@ import { ExportData } from '../types/utils'
 
 function TripPlanner () {
   const detailsRef = useRef<ExportData>();
+  const dailyPlannerRef = useRef<ExportData>();
+
 
   return (
     <MainLayout>
@@ -21,7 +23,7 @@ function TripPlanner () {
         <div className="trip-planner__body">
           <Details ref={detailsRef} />
           <ActivitiesProvider>
-            <DailyPlanner />
+            <DailyPlanner ref={dailyPlannerRef} />
             <Activities />
           </ActivitiesProvider>
         </div>

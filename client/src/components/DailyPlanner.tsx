@@ -1,7 +1,8 @@
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { DragEventHandler, SyntheticEvent, useMemo, useReducer, useState } from 'react';
+import { DragEventHandler, forwardRef, SyntheticEvent, useImperativeHandle, useMemo, useReducer, useState } from 'react';
 import { useActivities } from '../context/activities';
+import { ExportData } from '../types/utils';
 import './DailyPlanner.scss'
 
 type OnSelectedDayNumber = (d: number) => void;
@@ -204,12 +205,16 @@ const dayActivityCreateDefault = (options?: Partial<DayActivity>): DayActivity =
   ...options,
 });
 
-function DailyPlanner () {
+function DailyPlanner (props: any, ref: any) {
   const [dailyActivities, dispatchDailyActivitiesAction] = useReducer(dailyActivitiesReducer, []);
   
   const [selectedDayNumber, setSelectedDayNumber] = useState(0);
 
   const { activities } = useActivities();
+
+  useImperativeHandle<ExportData, ExportData>(ref, () => ({
+    exportData: () => ({ dailyActivities }),
+  }));
 
   const crtDayActivities = dailyActivities.filter(a => a.dayNumber === selectedDayNumber);
 
@@ -269,4 +274,4 @@ function DailyPlanner () {
   )
 }
 
-export default DailyPlanner
+export default forwardRef(DailyPlanner);
