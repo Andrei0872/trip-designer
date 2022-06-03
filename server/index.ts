@@ -1,6 +1,6 @@
 const express = require('express');
 const login = require('./controllers/user.controller');
-const db = require('../db');
+const db = require('./db');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -20,8 +20,8 @@ app.post('/save-trip',async(req, res) => {
     const values = Object.values(trip)
     let res = await client.query(`INSERT INTO trip(${Object.keys(trip).join(', ')}) VALUES($1, $2, $3, $4, $5) RETURNING id`, values)
     const id = res.rows[0].id;
-    const activities_values = activities.map((a:any) => ({...a, trip_id:id}));
-    res = await client.query(`INSERT INTO trip_activity(${Object.keys(activities_values[0]).join(', ')}) VALUES ${activities_values.map((a:any) => `(${Object.values(a)
+    const activities_values = activities.map((a) => ({...a, trip_id:id}));
+    res = await client.query(`INSERT INTO trip_activity(${Object.keys(activities_values[0]).join(', ')}) VALUES ${activities_values.map((a) => `(${Object.values(a)
       .map(v => typeof v === "string" ? `'${v}'` : v)
     .join(', ')})`)}`)
     console.log(res)
@@ -36,11 +36,11 @@ app.post('/save-trip',async(req, res) => {
  
 app.get('/activities', async(req, res) => {
 
-  let rawFilter = req.query.filter as string;
+  let rawFilter = req.query.filter;
 
   let filters = rawFilter.split(',').map(a => `'${a}'`);
  
-  const client = await Pool.connect();
+  const client = await db.getPool().connect();
   let result;
   try {
     if(rawFilter == 'all')
@@ -66,7 +66,7 @@ app.get('/activities', async(req, res) => {
 
 app.get('/activities-categories', async(req, res) => {
 
-  const client = await Pool.connect();
+  const client = await db.getPool().connect();
   let allCategories= await client.query('SELECT enum_range(NULL::category)');
   res.json({data: allCategories.rows[0].enum_range.slice(1,-1).split(',')});
 });

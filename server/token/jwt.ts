@@ -1,18 +1,18 @@
 const randToken = require('rand-token');
 const jwt = require('jsonwebtoken');
-const redisClient = require('../redis/client');
+const redis_client = require('./client.redis');
 const fs = require('fs');
 const path = require('path');
 
-const key = fs.readFileSync(path.resolve(__dirname, '../', '.key'), 'utf8');
+const key = fs.readFileSync(path.resolve(__dirname, './', 'key.ts'), 'utf8');
 const EXPIRY_TIME = 3 * 24 * 60 * 60;
 
 const createRefreshToken = () => randToken.generate(16);
 
-const storeRefreshToken = (userId, token) => redisClient.set(userId, token, 'EX', EXPIRY_TIME);
+const storeRefreshToken = (userId, token) => redis_client.set(userId, token, 'EX', EXPIRY_TIME);
 
 const verifyRefreshToken = async (userId, tokenToVerify) => {
-  const expectedToken = await redisClient.get(userId);
+  const expectedToken = await redis_client.get(userId);
   if (!expectedToken) {
     throw new Error('The refresh token does not exist.');
   }
@@ -22,7 +22,7 @@ const verifyRefreshToken = async (userId, tokenToVerify) => {
   }
 };
 
-const revokeRefreshToken = userId => redisClient.del(userId);
+const revokeRefreshToken = userId => redis_client.del(userId);
 
 const createAccessToken = payload => jwt.sign(payload, key, { algorithm: 'HS256', expiresIn: '2h' });
 

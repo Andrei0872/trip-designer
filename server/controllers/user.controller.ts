@@ -1,7 +1,7 @@
 const {JWT} = require('../token/jwt');
 const bcrypt = require('bcrypt');
-const database = require('../db');
-const router = express.Router();
+const database = require('../db/index');
+const router = require('express').Router();
 
 class UserController {
 
@@ -42,7 +42,7 @@ class UserController {
      });
     }
     
-    async getUserByEmail(email: string){
+    async getUserByEmail(email){
         const SQL = `SELECT * FROM user WHERE user.email = '${email}'`; 
         const client = database.connect();
         try {
@@ -59,7 +59,7 @@ class UserController {
           }
     }
 
-    async verifyUser (candidatePassword:string, encryptedPass:any) {
+    async verifyUser (candidatePassword, encryptedPass) {
         return bcrypt.compare(candidatePassword, encryptedPass);
     }
 }
