@@ -18,7 +18,11 @@
     "typescript": "^4.6.3"
   },
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "express": "^4.17.3",
-    "pg": "^8.7.3"
+    "jsonwebtoken": "^8.5.1",
+    "pg": "^8.7.3",
+    "rand-token": "^1.0.1",
+    "redis": "^4.1.0"
   }
 }

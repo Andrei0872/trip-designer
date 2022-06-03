@@ -6,8 +6,7 @@ const router = require('express').Router();
 class UserController {
 
      async login(req, res){
-        const user = await this.getUserByEmail(req.body.email);
-
+        let user = await this.getUserByEmail(req.body.email);
         if (!user){
             return res.status(400).json({
                 message: 'Invalid email!',
@@ -15,17 +14,17 @@ class UserController {
         }
 
         const validUser = await this.verifyUser(req.body.password, user.password);
-        if (!user){
+        if (!validUser){
             return res.status(400).json({
                 message: 'Invalid password!',
             });
         }
 
-        const token = JWT.createAccessToken({ id: user.id });
+        const token = JWT.createAccessToken({ id: user.id }); //FIXME:  TypeError: Cannot read property 'createAccessToken' of undefined
         const refreshToken = JWT.createRefreshToken();
 
         try {
-            await JWT.storeRefreshToken(user.id, refreshToken);
+            await JWT.storeRefreshToken(user.id, refreshToken); 
         } 
         catch(err) {
             console.log(err);
@@ -43,11 +42,13 @@ class UserController {
     }
     
     async getUserByEmail(email){
-        const SQL = `SELECT * FROM user WHERE user.email = '${email}'`; 
-        const client = database.connect();
+        const SQL = `SELECT * FROM public.user WHERE email = '${email}'`; 
+        const pool = database.getPool();
+
+        const client = await pool.connect();
         try {
-            const res = await database.client.query(SQL);
-            return res;
+            const res = await client.query(SQL);
+            return res.rows[0];
         }
         catch(err){
             console.error(err);
@@ -60,13 +61,16 @@ class UserController {
     }
 
     async verifyUser (candidatePassword, encryptedPass) {
-        return bcrypt.compare(candidatePassword, encryptedPass);
+         return bcrypt.compare(candidatePassword, encryptedPass);
     }
 }
 
-router.get('/', (req, res) => {
-    const controller = new UserController();
+const controller = new UserController();
+
+router.post('/login', (req, res) => {
     return controller.login(req, res);
 });
+
+router.get('/test', (req, res) => res.json({ message: 'this is a message!' }));
 
 module.exports = router;

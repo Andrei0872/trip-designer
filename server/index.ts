@@ -1,5 +1,5 @@
 const express = require('express');
-const login = require('./controllers/user.controller');
+const userController = require('./controllers/user.controller');
 const db = require('./db');
 
 const app = express();
@@ -9,7 +9,7 @@ app.use(express.json());
 
 app.get('/test', (req, res) => res.json({ message: 'this is a message!' }));
 
-app.use('/login', login); 
+app.use('/user', userController); 
 
 app.post('/save-trip',async(req, res) => {
 

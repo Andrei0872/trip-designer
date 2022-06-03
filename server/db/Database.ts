@@ -15,9 +15,13 @@ class Database {
         this.pool = new Pool(this.connConfig);
     }
 
-    async getPool () {
+    getPool () {
         return this.pool;
+    }
+
+    getConnConfig() {
+        return this.connConfig;
     }
 }
 
-module.exports = Database;
+module.exports = new Database();
