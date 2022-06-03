@@ -5,8 +5,12 @@ import DailyPlanner from "../components/DailyPlanner"
 import Details from "../components/Details"
 import { ActivitiesProvider } from '../context/activities'
 import MainLayout from '../layout/MainLayout'
+import { useRef } from 'react'
+import { ExportData } from '../types/utils'
 
 function TripPlanner () {
+  const detailsRef = useRef<ExportData>();
+
   return (
     <MainLayout>
       <section className="trip-planner">
@@ -15,7 +19,7 @@ function TripPlanner () {
         </div>
 
         <div className="trip-planner__body">
-          <Details />
+          <Details ref={detailsRef} />
           <ActivitiesProvider>
             <DailyPlanner />
             <Activities />

@@ -1,7 +1,9 @@
 import './Details.scss'
 
-import { useState } from 'react'
+import { forwardRef, useImperativeHandle, useRef, useState } from 'react'
 import React from 'react';
+import { ExportData } from '../types/utils';
+import { getFormDataEntriesAsObject } from '../utils';
 
 function Todo({ todo, index, checkTodo, removeTodo } : any) {
   return (
@@ -41,7 +43,7 @@ function TodoForm({addTodo}:any){
   );
 }
 
-function Details () {
+function Details (props: any, ref: any) {
   const [todos, setTodos] = React.useState([
     { text: "First todo",
       isCompleted: false},
@@ -50,10 +52,23 @@ function Details () {
     { text: "Third todo",
     isCompleted: false}
   ]);
+
+  const formRef = useRef(null);
+
+  useImperativeHandle<any, ExportData>(ref, () => ({
+    exportData: () => {
+      const otherDetails = getFormDataEntriesAsObject(new FormData(formRef.current!));
+      
+      return {
+        otherDetails,
+        todos,
+      };
+    },
+  }));
+
   const addTodo = (text: any, isCompleted: boolean) => {
     const newTodos = [...todos, { text, isCompleted }];
     setTodos(newTodos);
-    console.log(newTodos);
   };
   const checkTodo = (index: number) => {
     const newTodos = [...todos];
@@ -77,24 +92,28 @@ function Details () {
   return(
     <div className='details'>
       <h2>Details</h2>
-      <div className='details__cityCountry'>
-        <div className='details__image'>
-          Country, City
+
+      <form ref={formRef}>
+        <div className='details__cityCountry'>
+          <div className='details__image'>
+            Country, City
+          </div>
+          <div className='details__dates'>
+            <input type="date" id="start" name="trip-start" value="2022-05-16"/>
+            <input type="date" id="end" name="trip-end" value="2022-05-16"/>
+          </div>
         </div>
-        <div className='details__dates'>
-        <input type="date" id="start" name="trip-start" value="2022-05-16"/>
-        <input type="date" id="end" name="trip-start" value="2022-05-16"/>
+
+        <div className='details__accommodation'>
+          <h3>Accommodation</h3>
+          <button type='button'>Add</button>
         </div>
-      
-      </div>
-      <div className='details__accommodation'>
-        <h3>Accommodation</h3>
-        <button>Add</button>
-      </div>
-      <div className='details__transport'>
-        <h3>Transport</h3>
-        <button>Add</button>
-      </div>
+        <div className='details__transport'>
+          <h3>Transport</h3>
+          <button type='button'>Add</button>
+        </div>
+      </form>
+
       <div>
         <h3>To do</h3>
         <TodoForm addTodo={addTodo}/>
@@ -116,5 +135,5 @@ function Details () {
 
 }
 
-export default Details
+export default forwardRef(Details);
 
