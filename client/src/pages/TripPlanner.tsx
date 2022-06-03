@@ -12,12 +12,16 @@ function TripPlanner () {
   const detailsRef = useRef<ExportData>();
   const dailyPlannerRef = useRef<ExportData>();
 
+  const collectPlannedTripData = () => {
+    console.log(detailsRef.current?.exportData());
+    console.log(dailyPlannerRef.current?.exportData());
+  }
 
   return (
     <MainLayout>
       <section className="trip-planner">
         <div className="trip-planner__header">
-          <button className="trip-planner__save">Sign up to save</button>
+          <button onClick={collectPlannedTripData} className="trip-planner__save">Sign up to save</button>
         </div>
 
         <div className="trip-planner__body">
