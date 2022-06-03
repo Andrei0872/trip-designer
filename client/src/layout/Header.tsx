@@ -11,7 +11,7 @@ function Header () {
         <ul className='header__tabs'>
           <li className='header__tab'><Link to="/test">Create a trip</Link></li>
           <li className='header__tab'><Link to="/my-trips">My trips</Link></li>
-          <li className='header__tab'><Link to="/settings">Setting</Link></li>
+          <li className='header__tab'><Link to="/settings">Settings</Link></li>
         </ul>
       </nav>
     </header>
