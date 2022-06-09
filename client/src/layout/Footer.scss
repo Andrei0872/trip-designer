@@ -1,0 +1,23 @@
+.footer {
+    background-color:#2988BC;
+    color:#FFFF;
+    display: flex;
+    flex-direction: column;
+    &__info{
+        display: flex;
+        gap: 1rem;
+        justify-content: space-between;
+    }
+    &__details{
+        text-align: center;
+        font-size: small;
+        display: flex;
+        justify-content: space-around;
+    }
+  }
+
+
+
+
+
+  
