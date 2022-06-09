@@ -1,11 +1,13 @@
 const express = require('express');
 const userController = require('./controllers/user.controller');
 const db = require('./db');
+import cors from 'cors'
 
 const app = express();
 const PORT = process.env.PORT || 8080;
 
 app.use(express.json());
+app.use(cors());
 
 app.get('/test', (req, res) => res.json({ message: 'this is a message!' }));
 
