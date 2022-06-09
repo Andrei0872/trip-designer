@@ -99,8 +99,8 @@ function Details (props: any, ref: any) {
             Country, City
           </div>
           <div className='details__dates'>
-            <input type="date" id="start" name="trip-start" value="2022-05-16"/>
-            <input type="date" id="end" name="trip-end" value="2022-05-16"/>
+            <input type="date" id="start" name="trip-start" defaultValue="2022-05-16"/>
+            <input type="date" id="end" name="trip-end" defaultValue="2022-05-16"/>
           </div>
         </div>
 
