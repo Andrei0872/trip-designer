@@ -14,18 +14,21 @@ type SelectedCategories = TypeOfFirstArg<OnSelectedCategories>;
 
 const ALL_CATEGORIES_LABEL = 'all';
 
-const Categories: React.FC<{ categories: string[], onSelectedCategories: OnSelectedCategories }> = (props) => {
-  const { categories, onSelectedCategories } = props;
+const markSelectedCategories = (categories: string[]) => categories.reduce((selectedCategories: { [k: string]: boolean }, crtCat) => (selectedCategories[crtCat] = true, selectedCategories), {});
 
-  const [selectedCategories, setSelectedCategories] = useState<{ [k: string]: boolean }>({});
+const Categories: React.FC<{ categories: string[], onSelectedCategories: OnSelectedCategories, categoriesSelectedByDefault?: { [k: string]: boolean } }> = (props) => {
+  const { categories, onSelectedCategories, categoriesSelectedByDefault = {} } = props;
+
+  const [selectedCategories, setSelectedCategories] = useState<{ [k: string]: boolean }>(categoriesSelectedByDefault);
 
   const areAllSelected = categories.filter(c => selectedCategories[c]).length === categories.length;
   
   const selectCategory = (cat: string) => {
     let newSelectedCategories;
     
+    let newSelectedCategories;
     if (cat === ALL_CATEGORIES_LABEL) {
-      newSelectedCategories = categories.reduce((selectedCategories: { [k: string]: boolean }, crtCat) => (selectedCategories[crtCat] = true, selectedCategories), {})
+      newSelectedCategories = markSelectedCategories(categories);
     } else {
       newSelectedCategories = {
         ...selectedCategories,
@@ -59,7 +62,7 @@ const Categories: React.FC<{ categories: string[], onSelectedCategories: OnSelec
   )
 };
 
-const ActivitiesList: React.FC<{ activities: string[] | null }> = (props) => {
+const ActivitiesList: React.FC<{ activities: Activity[] | null }> = (props) => {
   const { activities } = props;
   
   // FIXME(BE): use `number` instead of `string`.
@@ -79,12 +82,12 @@ const ActivitiesList: React.FC<{ activities: string[] | null }> = (props) => {
                 activities.map(
                   a => 
                     <li
-                      onDragStart={ev => onDragStart(ev, a)}
+                      onDragStart={ev => onDragStart(ev, a.id.toString())}
                       draggable='true'
                       className='activities-list__activity'
-                      key={a}
+                      key={a.id}
                     >
-                      {a}
+                      {a.name}
                     </li>
                 )
               }
@@ -96,7 +99,15 @@ const ActivitiesList: React.FC<{ activities: string[] | null }> = (props) => {
   )
 }
 
-function Activities () {
+const DEFAULT_SELECTED_CATEGORIES = [ALL_CATEGORIES_LABEL];
+
+// TODO: maybe useMemo
+interface ActivitiesProps {
+  alreadySelectedCategories?: string[];
+}
+function Activities (props: ActivitiesProps) {
+  const { alreadySelectedCategories = DEFAULT_SELECTED_CATEGORIES } = props;
+
   const [selectedCategoriesMap, setSelectedCategoriesMap] = useState<SelectedCategories>({});
   const { activities, setActivities } = useActivities();
   
@@ -104,11 +115,15 @@ function Activities () {
 
   const selectedCategories = useMemo(() => categories?.filter(c => selectedCategoriesMap[c]), [selectedCategoriesMap]);
 
+  let categoriesSelectedByDefault;
+  const areAllSelectedByDefault = alreadySelectedCategories![0] === ALL_CATEGORIES_LABEL;
+  if (areAllSelectedByDefault && categories) {
+    categoriesSelectedByDefault = markSelectedCategories(categories);
+  } else if (Array.isArray(alreadySelectedCategories)) {
+    categoriesSelectedByDefault = markSelectedCategories(alreadySelectedCategories);
+  }
+
   useEffect(() => {
-    if (!selectedCategories) {
-      return;
-    }
-    
     fetchActivitiesByCategories(selectedCategories).then(a => setActivities(a));
   }, [selectedCategories]);
 
@@ -122,7 +137,8 @@ function Activities () {
         categories
           ? 
           <Categories 
-            categories={categories} 
+            categories={categories}
+            categoriesSelectedByDefault={categoriesSelectedByDefault}
             onSelectedCategories={onSelectedCategories}
           />
           : 'Loading categories...'
