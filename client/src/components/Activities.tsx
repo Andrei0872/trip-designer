@@ -24,7 +24,10 @@ const Categories: React.FC<{ categories: string[], onSelectedCategories: OnSelec
   const areAllSelected = categories.filter(c => selectedCategories[c]).length === categories.length;
   
   const selectCategory = (cat: string) => {
-    let newSelectedCategories;
+    const isAllToggled = cat === ALL_CATEGORIES_LABEL && areAllSelected;
+    if (isAllToggled) {
+      return;
+    }
     
     let newSelectedCategories;
     if (cat === ALL_CATEGORIES_LABEL) {
