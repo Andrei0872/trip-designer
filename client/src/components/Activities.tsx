@@ -39,6 +39,11 @@ const Categories: React.FC<{ categories: string[], onSelectedCategories: OnSelec
       };
     }
 
+    const isAnySelected = Object.values(newSelectedCategories).find(Boolean);
+    if (!isAnySelected) {
+      return;
+    }
+
     setSelectedCategories(newSelectedCategories);
     onSelectedCategories(newSelectedCategories);
   }
@@ -113,7 +118,7 @@ function Activities (props: ActivitiesProps) {
 
   const [selectedCategoriesMap, setSelectedCategoriesMap] = useState<SelectedCategories>({});
   const { activities, setActivities } = useActivities();
-  
+
   const categories = useCategories();
 
   const selectedCategories = useMemo(() => categories?.filter(c => selectedCategoriesMap[c]), [selectedCategoriesMap]);
