@@ -1,3 +1,5 @@
+import { CommandCompleteMessage } from "pg-protocol/dist/messages";
+
 const {JWT} = require('../token/jwt');
 const bcrypt = require('bcrypt');
 const database = require('../db/index');
@@ -5,21 +7,31 @@ const router = require('express').Router();
 
 class UserController {
 
+     async loginUser(email: string, password: string){
+        let user = await this.getUserByEmail(email);
+    
+        if (!user)
+            return { message: "Invalid email!", user:user };
+         
+        const validUser = this.verifyUser(password, user.password);
+        if (!validUser)
+            return { message: "Invalid password!", user:user };
+
+        return { message: "Valid email and password!", user:user };
+     }
+
      async login(req, res){
-        let user = await this.getUserByEmail(req.body.email);
-        if (!user){
-            return res.status(400).json({
-                message: 'Invalid email!',
-            });
-        }
+        const result =  await this.loginUser(req.body.email, req.body.password)
+        const resultMessage = result.message;
+        const user = result.user;
 
-        const validUser = await this.verifyUser(req.body.password, user.password);
-        if (!validUser){
+        if (resultMessage.startsWith("Invalid"))
             return res.status(400).json({
-                message: 'Invalid password!',
+                message: resultMessage,
             });
-        }
 
+        else if (resultMessage.startsWith("Valid")) {
+            
         const token = JWT.createAccessToken({ id: user.id }); //FIXME:  TypeError: Cannot read property 'createAccessToken' of undefined
         const refreshToken = JWT.createRefreshToken();
 
@@ -38,14 +50,18 @@ class UserController {
             email: req.body.email,
             refreshToken,
             id: user.id,
-     });
+         });
+        }     
     }
     
     async getUserByEmail(email){
         const SQL = `SELECT * FROM public.user WHERE email = '${email}'`; 
         const pool = database.getPool();
+        console.log("Conn config "+ database.getConnConfig().user);
 
         const client = await pool.connect();
+        console.log("Client:" + client);
+
         try {
             const res = await client.query(SQL);
             return res.rows[0];
@@ -71,6 +87,4 @@ router.post('/login', (req, res) => {
     return controller.login(req, res);
 });
 
-router.get('/test', (req, res) => res.json({ message: 'this is a message!' }));
-
-module.exports = router;
+module.exports = {router: router , userController: controller};
