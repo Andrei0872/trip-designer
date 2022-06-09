@@ -36,7 +36,7 @@ app.post('/save-trip',async(req, res) => {
  
 app.get('/activities', async(req, res) => {
 
-  let rawFilter = req.query.filter;
+  let rawFilter = req.query.filter || 'all';
 
   let filters = rawFilter.split(',').map(a => `'${a}'`);
  
