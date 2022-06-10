@@ -1,0 +1,26 @@
+.mainp{
+    border: 1px solid black;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    
+
+    &__inspirational{
+        border: 1px solid black;
+        padding: 10%;
+        background-color: whitesmoke;
+    }
+    &__right{
+        border: 1px solid black;
+        padding: 10%;
+        display: flex;
+        flex-direction: column;
+        justify-items: space-around;
+        background-color: whitesmoke;
+    }
+}
+#backgroundVideo{
+    position: fixed;
+    z-index: -1;
+
+}
