@@ -14,6 +14,17 @@
         display: flex;
         justify-content: space-around;
     }
+    &__social__media{
+        flex-grow: 1;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        text-align: center;
+        & a{
+            margin-left: 2rem;
+            color: var(--color-coral);
+        }
+    }
   }
 
 
