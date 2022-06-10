@@ -1,11 +1,10 @@
 import { createContext, ReactNode, useContext, useMemo, useState } from "react";
+import { Activity } from "../types/activity";
 
-type Activities = {};
-
-const ActivitiesContext = createContext<{ activities: string[] | null, [k: string]: any } | undefined>(undefined);
+const ActivitiesContext = createContext<{ activities: Activity[] | null, [k: string]: any } | undefined>(undefined);
 
 export const ActivitiesProvider: React.FC<{ children: ReactNode | undefined }> = ({ children }) => {
-  const [activities, setActivities] = useState<string[] | null>(null);
+  const [activities, setActivities] = useState<Activity[] | null>(null);
 
   const contextValue = useMemo(() => ({ activities, setActivities }), [activities]);
 
