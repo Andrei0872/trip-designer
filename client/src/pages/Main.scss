@@ -121,5 +121,8 @@
 #backgroundVideo{
     position: fixed;
     z-index: -1;
-
+    
+    @media all and (min-width: 1850px) {
+        width: 100%;
+    }
 }
