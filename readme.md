@@ -39,6 +39,16 @@ docker-compose -f docker-compose.yml --env-file ./server/.env up
 cd client && npm run start
 ```
 
+### Troubleshooting when containers no longer work after installing dependencies
+
+```bash
+docker-compose -f docker-compose.yml --env-file ./server/.env down -v
+```
+
+```bash
+docker-compose -f docker-compose.yml --env-file ./server/.env up --build --force-recreate
+```
+
 ---
 
 ## The software development of this project included:
