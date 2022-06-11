@@ -24,7 +24,7 @@ const verifyRefreshToken = async (userId, tokenToVerify) => {
 
 const revokeRefreshToken = userId => redis_client.del(userId);
 
-const createAccessToken = payload => jwt.sign(payload, key, { algorithm: 'HS256', expiresIn: '2h' });
+const createAccessToken = (payload: { id: any; }) => jwt.sign(payload, key, { algorithm: 'HS256', expiresIn: '2h' });
 
 const exchangeRefreshToken = async (req, res) => {
   const commonErrorMessage = 'An error occurred while exchanging the refresh token.';
