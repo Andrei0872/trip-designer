@@ -71,11 +71,11 @@ class UserController {
                 client.release()
             }
 
-            const token = JWT.createAccessToken({ id: userId }); //FIXME:  Error: The client is closed
-
+            const token = JWT.createAccessToken({ id: userId }); 
             const refreshToken = JWT.createRefreshToken();
+
             try {
-                await JWT.storeRefreshToken(userId, refreshToken);
+                JWT.storeRefreshToken(userId, refreshToken);    
             } 
             catch (err) {
                 console.log(err);
@@ -101,7 +101,7 @@ class UserController {
         if (!user)
             return { message: "Invalid email!", user:user };
          
-        const validUser = this.verifyUser(password, user.password);
+        const validUser =  await this.verifyUser(password, user.password);
         if (!validUser)
             return { message: "Invalid password!", user:user };
 
@@ -120,11 +120,11 @@ class UserController {
 
         else if (resultMessage.startsWith("Valid")) {
             
-        const token = JWT.createAccessToken({ id: user.id });  //FIXME:  Error: The client is closed
+        const token = JWT.createAccessToken({ id: user.id });
         const refreshToken = JWT.createRefreshToken();
 
         try {
-            await JWT.storeRefreshToken(user.id, refreshToken); 
+            JWT.storeRefreshToken(user.id, refreshToken); 
         } 
         catch(err) {
             console.log(err);
@@ -161,7 +161,7 @@ class UserController {
           }
     }
 
-    async verifyUser (candidatePassword, encryptedPass) {
+     async verifyUser (candidatePassword, encryptedPass) {
          return bcrypt.compare(candidatePassword, encryptedPass);
     }
 }
