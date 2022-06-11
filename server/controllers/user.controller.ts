@@ -13,15 +13,17 @@ class UserController {
 
         // Standard email format 
         if (! email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/))
-            return false;
+            return {ok: false, message: "Invalid email format!"};
 
         // Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character    
         if (! password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/))
-            return false;  
+            return {ok: false, message: "Invalid password format!"};
+        
+        // The isAdmin field shoul be checked 
         if (isAdmin  == undefined)  
-            return false;  
+            return {ok: false, message: "Undefined isAdmin!"}; 
 
-        return true;      
+        return {ok: true, message: "Valid fields!"};;      
      } 
 
      async register(req, res){
@@ -34,7 +36,9 @@ class UserController {
             });
         }
 
-        if (! this.registerUser(req.body.email, req.body.password, req.body.is_admin)){
+        const validUser =  await this.registerUser(req.body.email, req.body.password, req.body.is_admin);
+        console.log(validUser.message);
+        if (! validUser.ok){
             // verify the completed fields
             return res.status(422).json({
                 message: 'Invalid input!'
