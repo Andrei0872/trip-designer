@@ -8,6 +8,7 @@ import { Activity } from "../types/activity";
 import { TypeOfFirstArg } from "../types/utils";
 import { useCategories } from '../hooks/useCategories';
 import { useActivities } from '../context/activities';
+import { useAxios } from '../context/useAxios';
 
 type OnSelectedCategories = (selectedCategories: { [k: string]: boolean }) => void;
 type SelectedCategories = TypeOfFirstArg<OnSelectedCategories>;
@@ -115,6 +116,8 @@ interface ActivitiesProps {
 }
 function Activities (props: ActivitiesProps) {
   const { alreadySelectedCategories = DEFAULT_SELECTED_CATEGORIES } = props;
+
+  useAxios();
 
   const [selectedCategoriesMap, setSelectedCategoriesMap] = useState<SelectedCategories>({});
   const { activities, setActivities } = useActivities();
