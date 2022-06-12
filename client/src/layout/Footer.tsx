@@ -28,9 +28,9 @@ function Footer () {
       </div>
 
       <div className='footer__details'>
-        <p>Copyright <FontAwesomeIcon fontSize={'.9rem'} icon={faCopyright} /> 2022 TripDesigner </p>
-        <p>This website has learning purposes only!</p>
         <p>Created on 15 April 2022</p>  
+        <p>This website has learning purposes only!</p>
+        <p>Copyright <FontAwesomeIcon fontSize={'.9rem'} icon={faCopyright} /> 2022 TripDesigner </p>
       </div>
         
     </footer>
