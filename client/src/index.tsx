@@ -8,22 +8,26 @@ import TripPlanner from './pages/TripPlanner';
 import Test from './pages/Test';
 import Main from './pages/Main';
 import MyTrips from './pages/MyTrips';
+import { UserAuthProvider } from './context/userAuthContext';
+import UserAuthenticatedGuard from './guards/UserAuthenticatedGuard';
 
 const root = createRoot(document.getElementById('root')!);
 root.render(
   // <React.StrictMode>
-  //   <App />
+    <BrowserRouter>
+        <UserAuthProvider>
+          <Routes>
+              <Route
+                path="/"
+                element={ <Main /> }
+              />
+              <Route path="test" element={<Test />} />
+              <Route path="trip-planner" element={ <TripPlanner />} />
+              <Route path="my-trips" element={<UserAuthenticatedGuard><MyTrips /></UserAuthenticatedGuard> } />
+          </Routes>
+        </UserAuthProvider>
+    </BrowserRouter>
   // </React.StrictMode>
-  <React.StrictMode>
-  <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<Main />} />
-      <Route path="test" element={<Test />} />
-      <Route path="trip-planner" element={<TripPlanner />} />
-      <Route path="my-trips" element={<MyTrips />} />
-    </Routes>
-  </BrowserRouter>
-  </React.StrictMode>
 );
 
 
