@@ -17,6 +17,18 @@ cd server
 cp .env.example .env
 ```
 
+### Specifying the key for signing tokens
+
+```bash
+cd server/token/
+```
+
+```bash
+cp .key.example .key
+```
+
+Make sure to add a key that's difficult to guess!
+
 ### Installing the dependencies
 
 ```bash
