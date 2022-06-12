@@ -65,10 +65,11 @@ app.get('/activities', async(req, res) => {
 );
 
 app.get('/activities-categories', async(req, res) => {
-
   const client = await db.getPool().connect();
   let allCategories= await client.query('SELECT enum_range(NULL::category)');
   res.json({data: allCategories.rows[0].enum_range.slice(1,-1).split(',')});
+
+  client.release();
 });
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

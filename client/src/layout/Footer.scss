@@ -1,0 +1,41 @@
+.footer {
+    background-color:#2988BC;
+    color:#FFFF;
+    display: flex;
+    flex-direction: column;
+    &__info{
+        display: flex;
+        gap: 1rem;
+        justify-content: space-around;
+    }
+    &__details{
+        text-align: center;
+        font-size: small;
+        display: flex;
+        justify-content: space-around;
+    }
+    &__social__media{
+        flex-grow: 1;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        text-align: center;
+        & a{
+            margin-left: 2rem;
+            color: var(--color-coral);
+        }
+    }
+    &__contact{
+        text-align: center;
+    }
+    &__about{
+        text-align: center;
+    }
+
+  }
+
+
+
+
+
+  

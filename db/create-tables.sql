@@ -3,7 +3,7 @@ CREATE TYPE category AS ENUM ('drinks', 'food', 'cultural', 'sport', 'experience
 CREATE TABLE "user" (
 id SERIAL PRIMARY KEY,
 email VARCHAR(30) NOT NULL,
-password VARCHAR(30) NOT NULL,
+password VARCHAR(255) NOT NULL,
 is_admin BOOL NOT NULL,
 profile_photo VARCHAR(100) 
 );

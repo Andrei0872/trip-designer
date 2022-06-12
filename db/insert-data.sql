@@ -72,10 +72,10 @@ INSERT INTO activity (name, description, category, city, country)
 VALUES ('Off Vine', NULL, '{drinks, food}', 'Los Angeles', 'USA');
 
 INSERT INTO activity (name, description, category, city, country)
-VALUES ('The Grove', NULL, '{outdoor,shopping,}', 'Los Angeles', 'USA');
+VALUES ('The Grove', NULL, '{outdoor,shopping}', 'Los Angeles', 'USA');
 
 INSERT INTO activity (name, description, category, city, country)
-VALUES ('South Coast Plaza', NULL, '{indoor,shopping,}', 'Los Angeles', 'USA');
+VALUES ('South Coast Plaza', NULL, '{indoor,shopping}', 'Los Angeles', 'USA');
 
 -- trip_activity
 INSERT INTO trip_activity (trip_id, activity_id, day_number, hours, note)

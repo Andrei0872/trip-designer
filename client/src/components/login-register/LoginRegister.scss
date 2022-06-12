@@ -1,0 +1,20 @@
+.logreg__form__login{
+    display: flex;
+    flex-direction: column;
+
+    &__label{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+    }
+}
+.logreg__form__register{
+    display: flex;
+    flex-direction: column;
+
+    &__label{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+    }
+}

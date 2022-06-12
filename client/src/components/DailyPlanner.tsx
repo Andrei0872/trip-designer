@@ -126,9 +126,7 @@ const DayActivities: React.FC<DayActivitiesProps> = (props) => {
 }
 
 interface DayActivity {
-  // tripId: number;
-  // FIXME(BE): use `number` instead of `string`.
-  activityId: string;
+  activityId: number;
   activityName: string;
   dayNumber: number;
   hours: string;
@@ -195,8 +193,7 @@ const dailyActivitiesReducer = (state: DayActivitiesState, action: DayActivities
 };
 
 const dayActivityCreateDefault = (options?: Partial<DayActivity>): DayActivity => ({
-  // FIXME(BE): use `number` instead of `string`.
-  activityId: '',
+  activityId: -1,
   activityName: '',
   hours: '',
   note: '',
@@ -226,13 +223,13 @@ function DailyPlanner (props: any, ref: any) {
 
     const activityId = ev.dataTransfer.getData('text');
     // TODO: adapt for Backend when the time comes.
-    const activity = activities.find(a => a === activityId);
+    const activity = activities.find(a => +a === +activityId);
 
     dispatchDailyActivitiesAction({
       type: 'add',
       ...dayActivityCreateDefault({
-        activityName: activity,
-        activityId: activity,
+        activityName: activity?.name,
+        activityId: activity?.id,
         dayNumber: selectedDayNumber,
       }),
     });
