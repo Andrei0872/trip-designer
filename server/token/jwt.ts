@@ -39,7 +39,7 @@ const exchangeRefreshToken = async (req, res) => {
   const commonErrorMessage = 'An error occurred while exchanging the refresh token.';
 
   const existingRefreshToken = req.headers['x-refresh-token'];
-  const userId = req.body?.id.toString();
+  const userId = req.body.id?.toString();
 
   try {
     await verifyRefreshToken(userId, existingRefreshToken);
