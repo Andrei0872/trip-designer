@@ -1,6 +1,7 @@
 const express = require('express');
 const userController = require('./controllers/user.controller').router;
 const db = require('./db');
+import { jwtMiddleware } from './middlewares/jwt.middleware';
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -10,6 +11,8 @@ app.use(express.json());
 app.get('/test', (req, res) => res.json({ message: 'this is a message!' }));
 
 app.use('/user', userController); 
+
+app.use(jwtMiddleware);
 
 app.post('/save-trip',async(req, res) => {
 
