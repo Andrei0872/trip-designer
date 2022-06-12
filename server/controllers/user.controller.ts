@@ -7,21 +7,17 @@ const router = require('express').Router();
 
 class UserController {
 
-     async registerUser(email:string, password:string, isAdmin:boolean){
+     async registerUser(email:string, password:string){
         // return True if register is possible (all conditions are met)
         // otherwise, return False
 
         // Standard email format 
         if (! email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/))
-            return {ok: false, message: "Invalid email format!"};
+            return {ok: false, message: "Invalid email or password format!"};
 
         // Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character    
         if (! password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/))
-            return {ok: false, message: "Invalid password format!"};
-        
-        // The isAdmin field shoul be checked 
-        if (isAdmin  == undefined)  
-            return {ok: false, message: "Undefined isAdmin!"}; 
+            return {ok: false, message: "Invalid email or password format!"};
 
         return {ok: true, message: "Valid fields!"};;      
      } 
@@ -36,7 +32,7 @@ class UserController {
             });
         }
 
-        const validUser =  await this.registerUser(req.body.email, req.body.password, req.body.is_admin);
+        const validUser =  await this.registerUser(req.body.email, req.body.password);
         console.log(validUser.message);
         if (! validUser.ok){
             // verify the completed fields
@@ -44,70 +40,68 @@ class UserController {
                 message: 'Invalid input!'
             });
         }
-
-        else{
-            const email = req.body.email;
-            const encryptedPass = await bcrypt.hash(req.body.password, 10);
-            let isAdmin = req.body.is_admin;
-           
-            let profilePhoto = req.body.profile_photo;
-            if (profilePhoto == undefined) 
-                profilePhoto = "";
-
-            // insert the user into the table  
-            const SQL = `INSERT INTO public.user(email, password, is_admin, profile_photo) VALUES ('${email}', '${encryptedPass}', '${isAdmin}', '${profilePhoto}') RETURNING id`; 
-            
-            const pool = database.getPool();
-            const client = await pool.connect();
-
-            try {
-                const  insertedUser = await client.query(SQL);
-                var userId = insertedUser.rows[0].id;
-
-                console.log("User with id. " + userId + " added with success!");
-            }
-            catch(err){
-                console.error(err);
-            }
-            finally {
-                // Make sure to release the client before any error handling,
-                // just in case the error handling itself throws an error.
-                client.release()
-            }
-
-            const token = JWT.createAccessToken({ id: userId }); 
-            const refreshToken = JWT.createRefreshToken();
-
-            try {
-                JWT.storeRefreshToken(userId, refreshToken);    
-            } 
-            catch (err) {
-                console.log(err);
-
-                return res.status(500).json({
-                    message: 'An error occurred while signing up.',
-                });
-            }
+    
+        const email = req.body.email;
+        const encryptedPass = await bcrypt.hash(req.body.password, 10);
         
-            return res.status(200).json({
-                email: email,
-                token,
-                refreshToken,
-                id: userId
-            });
+        let profilePhoto = req.body.profile_photo;
+        if (profilePhoto == undefined) 
+            profilePhoto = "";
 
-            }  
+        // insert the user into the table  
+        const SQL = `INSERT INTO public.user(email, password, is_admin, profile_photo) VALUES ('${email}', '${encryptedPass}', FALSE, '${profilePhoto}') RETURNING id`; 
+        
+        const pool = database.getPool();
+        const client = await pool.connect();
+
+        try {
+            const  insertedUser = await client.query(SQL);
+            var userId = insertedUser.rows[0].id;
+
+            console.log("User with id. " + userId + " added with success!");
+        }
+        catch(err){
+            console.error(err);
+        }
+        finally {
+            // Make sure to release the client before any error handling,
+            // just in case the error handling itself throws an error.
+            client.release()
+        }
+
+        const token = JWT.createAccessToken({ id: userId }); 
+        const refreshToken = JWT.createRefreshToken();
+
+        try {
+            JWT.storeRefreshToken(userId, refreshToken);    
+        } 
+        catch (err) {
+            console.log(err);
+
+            return res.status(500).json({
+                message: 'An error occurred while signing up.',
+            });
+        }
+    
+        return res.status(200).json({
+            email: email,
+            token,
+            refreshToken,
+            id: userId
+        });
+
+              
      } 
 
      async loginUser(email: string, password: string){
         let user = await this.getUserByEmail(email);
     
         if (!user)
-            return { message: "Invalid email!", user:user };
+            return { message: "Invalid password or email!", user:user };
          
         const validUser =  await this.verifyUser(password, user.password);
         if (!validUser)
-            return { message: "Invalid password!", user:user };
+            return { message: "Invalid password or email!", user:user };
 
         return { message: "Valid email and password!", user:user };
      }
