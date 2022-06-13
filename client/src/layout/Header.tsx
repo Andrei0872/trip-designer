@@ -5,7 +5,7 @@ import { Link } from "react-router-dom"
 function Header () {
   return (
     <header className="header">
-      <a className='header__title' href="/">TripDesigner</a>
+      <Link className='header__title' to='/'>TripDesigner</Link>
 
       <nav className='header__nav'>
         <ul className='header__tabs'>
