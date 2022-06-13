@@ -1,5 +1,25 @@
 # Trip Designer
 
+- [Trip Designer](#trip-designer)
+  - [Prerequisites](#prerequisites)
+  - [Getting started](#getting-started)
+    - [Setting up ENV variables](#setting-up-env-variables)
+    - [Specifying the key for signing tokens](#specifying-the-key-for-signing-tokens)
+    - [Installing the dependencies](#installing-the-dependencies)
+    - [Starting the containers](#starting-the-containers)
+    - [Starting the client app](#starting-the-client-app)
+    - [Troubleshooting when containers no longer work after installing dependencies](#troubleshooting-when-containers-no-longer-work-after-installing-dependencies)
+  - [The software development of this project included:](#the-software-development-of-this-project-included)
+    - [User stories & backlog creation](#user-stories--backlog-creation)
+    - [Design/ architecture/ UML](#design-architecture-uml)
+    - [Source control](#source-control)
+    - [Unit tests](#unit-tests)
+    - [Bug reporting](#bug-reporting)
+    - [Build tool](#build-tool)
+    - [Refactoring and code standards](#refactoring-and-code-standards)
+    - [Design patterns](#design-patterns)
+  - [Visualizing the database with `pgadmin`](#visualizing-the-database-with-pgadmin)
+
 ## Prerequisites
 
 * [Docker](https://docs.docker.com/get-docker/)
@@ -126,7 +146,11 @@ As a side note, there is a **pgAdmin** container whereby the database schema can
 
 ---
 ### Design patterns
-&emsp; TODO
+
+As far as React is concerned, we've used **2 design patterns**(among others, possibly):
+
+* *Presentational and Container Component Pattern*: it helps **separating** the **business logic** from the **view logic**; the **container components**(also called *smart components*) are responsible for fetching the data and communicating with external providers, whereas **presentational components**(also referred to as *dumb components*) are only concerned with displaying data and nothing else
+* *Provider Pattern*: it is used to avoid a common problem in React applications, which is **prop drilling**; the way it works it that data is stored at a certain level of the component tree so that it is always available to some subtrees; an example of that is how we store the user data after they log in - that data is available across all components.
 
 
 ## Visualizing the database with `pgadmin`
