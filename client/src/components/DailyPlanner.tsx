@@ -223,7 +223,7 @@ function DailyPlanner (props: any, ref: any) {
 
     const activityId = ev.dataTransfer.getData('text');
     // TODO: adapt for Backend when the time comes.
-    const activity = activities.find(a => +a === +activityId);
+    const activity = activities.find(a => +a.id === +activityId);
 
     dispatchDailyActivitiesAction({
       type: 'add',
