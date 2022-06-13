@@ -1,5 +1,6 @@
 .main {
     height: 100%;
     display: grid;
-    grid-template-rows: auto 1fr auto;
+    // Using these values because the `<header>` has `position: fixed` set.
+    grid-template-rows: 1fr auto;
   }

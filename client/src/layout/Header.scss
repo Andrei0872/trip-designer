@@ -5,6 +5,7 @@
     background-color: var(--color-grecian-blue);
     position: fixed;
     width: 100%;
+    height: var(--header-height);
 
     & a {
         color: #fff;
@@ -49,5 +50,9 @@
                 background-color: var(--color-sea);
             }
         }
+    }
+
+    & + * {
+        margin-top: var(--header-height);
     }
 }
