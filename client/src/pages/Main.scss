@@ -63,13 +63,13 @@
         justify-content: space-evenly;
         background-color: rgba(245, 245, 245, 0.5);
         font-size: large;
-        margin-top: 16%;
-        margin-left: 16%;
+        margin-top: 10%;
+        margin-left: 10%;
         width: 35vw;
-        height: 30vh;
-        border-radius: 30px;
+        height: fit-content;
+        border-radius: 5px;
 
-        //&__buttons__login
+        
         &__buttons{
             display: flex;
             flex-direction: row;
@@ -79,10 +79,11 @@
                 font-size: 25px;
                 padding-top: 10px;
                 padding-bottom: 10px;
-                padding-left: 10px;
-                padding-right: 10px;
+                //padding-left: 10px;
+                //padding-right: 10px;
+                width: 50%;
                 background-color: var(--color-sea);
-                color: whitesmoke;;
+                color: whitesmoke;
                 border-radius: 10px;
                 border: 1px solid white;
                 cursor: pointer;
@@ -93,12 +94,14 @@
                 }
                 
             }
+
             &__register{
                 font-size: 25px;
                 padding-top: 10px;
                 padding-bottom: 10px;
-                padding-left: 10px;
-                padding-right: 10px;
+                //padding-left: 10px;
+                //padding-right: 10px;
+                width: 50%;
                 background-color: var(--color-sea);
                 color: whitesmoke;
                 border-radius: 10px;

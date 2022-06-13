@@ -23,12 +23,12 @@ function Main() {
     }
   }
   const activeButtonStyle = {
-    color: "#2F496E",
+    color: "#2988BC",
     backgroundColor: "#F4EADE"
   }
   const inactiveButtonStyle = {
     color: "#F4EADE",
-    backgroundColor: "#2F496E"
+    backgroundColor: "#2988BC"
   }
   return (
     <MainLayout>
