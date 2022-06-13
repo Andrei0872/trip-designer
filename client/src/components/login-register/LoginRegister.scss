@@ -1,20 +1,79 @@
 .logreg__form__login{
     display: flex;
     flex-direction: column;
+    align-items: center;
 
     &__label{
         display: flex;
         flex-direction: row;
-        justify-content: space-around;
+        color: var(--color-grecian-blue);
+        font-size: 22px;
+        margin-top: 3%;
+
+    }
+
+    &__input{
+        border-radius: 5px;
+        border: 1px solid white;
+        height: 25px;
+        width: 75%;
+        margin-bottom: 3%;
+    }
+
+    &__button{
+        background-color: var(--color-grecian-blue);
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid white;
+        font-style: italic;
+        font-size: 15px;
+        color: var(--color-plaster);
+        cursor: pointer;
+        transition: 0.3s;
+
+        &:hover{
+            background-color: var(--color-plaster);
+            color: var(--color-grecian-blue);
+        }
     }
 }
 .logreg__form__register{
     display: flex;
     flex-direction: column;
+    align-items: center;
 
     &__label{
         display: flex;
         flex-direction: row;
-        justify-content: space-around;
+        color: var(--color-grecian-blue);
+        font-size: 22px;
+        margin-top: 3%;
+
+    }
+
+    &__input{
+        border-radius: 5px;
+        border: 1px solid white;
+        height: 25px;
+        width: 75%;
+        margin-bottom: 3%;
+    }
+
+    &__button{
+        background-color: var(--color-grecian-blue);
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid white;
+        font-style: italic;
+        font-size: 15px;
+        color: var(--color-plaster);
+        cursor: pointer;
+        transition: 0.3s;
+
+        &:hover{
+            background-color: var(--color-plaster);
+            color: var(--color-grecian-blue);
+        }
+    
     }
 }

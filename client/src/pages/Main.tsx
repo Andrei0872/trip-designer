@@ -22,6 +22,14 @@ function Main() {
       
     }
   }
+  const activeButtonStyle = {
+    color: "#2988BC",
+    backgroundColor: "#F4EADE"
+  }
+  const inactiveButtonStyle = {
+    color: "#F4EADE",
+    backgroundColor: "#2988BC"
+  }
   return (
     <MainLayout>
         <div className="mainp">
@@ -29,20 +37,20 @@ function Main() {
             <source src="/background_video_1.mp4" type="video/mp4"/>
           </video>
           <div className="mainp__inspirational"> 
-            <h1>This sentence is here to inspire you...</h1>
-            <button className="mainp__startbutton">Start the adventure!</button> 
+            <h1 className="mainp__inspirational__sentence">Dare to live <br/> <i> the life </i> <br/> you've always wanted</h1>
+            <button className="mainp__inspirational__startbutton">Start the adventure!</button> 
           </div>
 
           <div className="mainp__right"> 
-            <div className="mainp__right__button">
-              <button onClick={handleClickLog} className="mainp__right__button__login">Login</button>
-              <button onClick={handleClickReg} className="mainp__right__button__register">Register</button>
+            <div className="mainp__right__buttons">
+              <button onClick={handleClickLog} className="mainp__right__buttons__login" style={isShownLogin ? activeButtonStyle : inactiveButtonStyle}>Login</button>
+              <button onClick={handleClickReg} className="mainp__right__buttons__register" style={isShownRegister ? activeButtonStyle : inactiveButtonStyle}>Register</button>
             </div>
 
-            <div>
+            <div className="mainp__right__form">
               {isShownLogin && <Login/>}
             </div>
-            <div>
+            <div className="mainp__right__form">
               {isShownRegister && <Register/>}
             </div>
           </div>
