@@ -29,8 +29,8 @@ function Main() {
             <source src="/background_video_1.mp4" type="video/mp4"/>
           </video>
           <div className="mainp__inspirational"> 
-            <h1>This sentence is here to inspire you...</h1>
-            <button className="mainp__startbutton">Start the adventure!</button> 
+            <h1 className="mainp__inspirational__sentence">Dare to live <br/> <i> the life </i> <br/> you've always wanted</h1>
+            <button className="mainp__inspirational__startbutton">Start the adventure!</button> 
           </div>
 
           <div className="mainp__right"> 

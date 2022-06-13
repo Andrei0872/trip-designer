@@ -1,3 +1,11 @@
+// :root {
+//     --color-grecian-blue: #2988BC;
+//     --color-sea: #2F496E;
+//     --color-plaster: #F4EADE;
+//     --color-coral: #ED8C72;
+  
+//     font-family: 'Cabin', sans-serif;
+//   }
 .mainp{
     border: 1px solid black;
     display: flex;
@@ -6,9 +14,20 @@
     
 
     &__inspirational{
-        border: 1px solid black;
-        padding: 10%;
-        background-color: whitesmoke;
+        font-size: 160%;
+        padding-bottom: 13%;
+        color: var(--color-plaster);
+
+        &__sentence{
+            border-top: 4px solid var(--color-plaster);
+            border-bottom: 4px solid var(--color-plaster);
+            padding: 7%;
+            
+        }
+        
+        //border: 1px solid black;
+        //padding: 10%;
+        //background-color: whitesmoke;
     }
     &__right{
         border: 1px solid black;
