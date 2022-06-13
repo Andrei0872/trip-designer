@@ -86,11 +86,11 @@ cd client && npm run start
 
 ---
 ### Unit tests
-&emsp; TODO
+&emsp; We used Jest, a simple framework that helped us test the functionalities of our app. We came to the conclusion that login & register were of high importance in the app, so unit tests were made for these 2 components in order to make sure everything works as planned.
 
 ---
 ### Bug reporting
-&emsp; We ussed [issues](https://github.com/Andrei0872/trip-designer/issues) on Github to track bugs and problems that occured during the software development.
+&emsp; We used [issues](https://github.com/Andrei0872/trip-designer/issues) on Github to track bugs and problems that occured during the software development.
 
 ---
 ### Build tool
