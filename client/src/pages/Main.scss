@@ -6,8 +6,8 @@
 .mainp{
     border: 1px solid black;
     display: flex;
-    justify-content: space-around;
-    align-items: center;
+    justify-content: flex-start;
+    align-items: flex-start;
     
 
     &__inspirational{
@@ -15,11 +15,14 @@
         padding-bottom: 13%;
         color: var(--color-plaster);
         margin-top: 6%;
+        margin-left: 15%;
+
 
         &__sentence{
             border-top: 4px solid var(--color-plaster);
             border-bottom: 4px solid var(--color-plaster);
             padding: 7%;
+            text-align: center;
             
         }
 
@@ -34,7 +37,8 @@
             width: fit-content;
             height: fit-content;
             margin-top: 10%;
-            margin-left: 25%;
+            margin-left: 15%;
+            
             padding: 13px;
             cursor: pointer;
             //text
@@ -54,12 +58,62 @@
         
     }
     &__right{
-        border: 1px solid black;
-        padding: 10%;
         display: flex;
         flex-direction: column;
-        justify-items: space-around;
-        background-color: whitesmoke;
+        justify-content: space-evenly;
+        background-color: rgba(245, 245, 245, 0.5);
+        font-size: large;
+        margin-top: 16%;
+        margin-left: 16%;
+        width: 35vw;
+        height: 30vh;
+        border-radius: 30px;
+
+        //&__buttons__login
+        &__buttons{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            
+            &__login{
+                font-size: 25px;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                padding-left: 10px;
+                padding-right: 10px;
+                background-color: var(--color-sea);
+                color: whitesmoke;;
+                border-radius: 10px;
+                border: 1px solid white;
+                cursor: pointer;
+                transition: 0.3s;
+
+                &:hover{
+                    box-shadow: 5px 5px #2F496E;
+                }
+                
+            }
+            &__register{
+                font-size: 25px;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                padding-left: 10px;
+                padding-right: 10px;
+                background-color: var(--color-sea);
+                color: whitesmoke;
+                border-radius: 10px;
+                border: 2px solid white;
+                cursor: pointer;
+                transition: 0.3s;
+
+                &:hover{
+                    box-shadow: 5px 5px #2F496E;
+                }
+                
+                
+            }
+        }
+
     }
 }
 #backgroundVideo{
