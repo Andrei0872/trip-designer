@@ -112,11 +112,13 @@ docker-compose -f docker-compose.yml --env-file ./server/.env up --build --force
 
 ---
 ### Bug reporting
-&emsp; We used [issues](https://github.com/Andrei0872/trip-designer/issues) on Github to track bugs and problems that occured during the software development.
+&emsp; We used [issues](https://github.com/Andrei0872/trip-designer/issues) on Github to track bugs and problems that occurred during the software development.
 
 ---
 ### Build tool
-&emsp; TODO 
+
+&emsp; We used `npm` to manage dependencies, along with `docker` and `docker-compose` to quickly spin up the **server** application and its dependencies: a **Postgres database** and **redis**.
+As a side note, there is a **pgAdmin** container whereby the database schema can be visualized.
 
 ---
 ### Refactoring and code standards
