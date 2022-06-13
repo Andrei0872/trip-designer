@@ -22,6 +22,14 @@ function Main() {
       
     }
   }
+  const activeButtonStyle = {
+    color: "#2F496E",
+    backgroundColor: "#F4EADE"
+  }
+  const inactiveButtonStyle = {
+    color: "#F4EADE",
+    backgroundColor: "#2F496E"
+  }
   return (
     <MainLayout>
         <div className="mainp">
@@ -34,15 +42,15 @@ function Main() {
           </div>
 
           <div className="mainp__right"> 
-            <div className="mainp__right__button">
-              <button onClick={handleClickLog} className="mainp__right__button__login">Login</button>
-              <button onClick={handleClickReg} className="mainp__right__button__register">Register</button>
+            <div className="mainp__right__buttons">
+              <button onClick={handleClickLog} className="mainp__right__buttons__login" style={isShownLogin ? activeButtonStyle : inactiveButtonStyle}>Login</button>
+              <button onClick={handleClickReg} className="mainp__right__buttons__register" style={isShownRegister ? activeButtonStyle : inactiveButtonStyle}>Register</button>
             </div>
 
-            <div>
+            <div className="mainp__right__form">
               {isShownLogin && <Login/>}
             </div>
-            <div>
+            <div className="mainp__right__form">
               {isShownRegister && <Register/>}
             </div>
           </div>
