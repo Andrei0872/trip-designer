@@ -7,7 +7,9 @@ const getUserLocalStorageData = () => JSON.parse(localStorage.getItem(USER_LOCAL
 
 const addUserToLocalStorage = (user: User) => localStorage.setItem(USER_LOCAL_STORAGE_KEY, JSON.stringify(user));
 
-const UserAuthContext = createContext<{ user: User | null, setUser: (u: User) => void } | undefined>(undefined);
+const removeUserFromLocalStorage = () => localStorage.removeItem(USER_LOCAL_STORAGE_KEY);
+
+const UserAuthContext = createContext<{ user: User | null, setUser: (u: User) => void, logOutUser: () => void } | undefined>(undefined);
 
 export const UserAuthProvider: React.FC<{ children: ReactNode | undefined }> = ({ children }) => {
     const [user, setUser] = useState(getUserLocalStorageData());
@@ -16,7 +18,13 @@ export const UserAuthProvider: React.FC<{ children: ReactNode | undefined }> = (
         addUserToLocalStorage(user);
         setUser(user);
     }
-    const value = useMemo(() => ({ user, setUser: setUserWrapper }), [user]);
+
+    const logOutUser = () => {
+        setUser(null);
+        removeUserFromLocalStorage();
+    };
+
+    const value = useMemo(() => ({ user, setUser: setUserWrapper, logOutUser }), [user]);
 
     return (
         <UserAuthContext.Provider value={value}>
