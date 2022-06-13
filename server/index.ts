@@ -1,15 +1,23 @@
 const express = require('express');
 const userController = require('./controllers/user.controller').router;
 const db = require('./db');
+import cors from 'cors'
+import { jwtMiddleware } from './middlewares/jwt.middleware';
+import { exchangeRefreshToken } from './token/jwt';
 
 const app = express();
 const PORT = process.env.PORT || 8080;
 
 app.use(express.json());
+app.use(cors());
 
 app.get('/test', (req, res) => res.json({ message: 'this is a message!' }));
 
 app.use('/user', userController); 
+
+app.post('/refresh', exchangeRefreshToken);
+
+app.use(jwtMiddleware);
 
 app.post('/save-trip',async(req, res) => {
 

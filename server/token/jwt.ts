@@ -1,18 +1,27 @@
-const randToken = require('rand-token');
-const jwt = require('jsonwebtoken');
-const redis_client = require('./client.redis');
-const fs = require('fs');
-const path = require('path');
+import randToken from 'rand-token';
+import jwt from 'jsonwebtoken';
+import fs from 'fs';
+import path from 'path';
 
-const key = fs.readFileSync(path.resolve(__dirname, './', 'key.ts'), 'utf8');
+import { redisClient } from './client.redis'
+
+const key = fs.readFileSync(path.resolve(__dirname, './', '.key'), 'utf8');
 const EXPIRY_TIME = 3 * 24 * 60 * 60;
 
 const createRefreshToken = () => randToken.generate(16);
 
-const storeRefreshToken = (userId, token) => redis_client.set(userId, token, 'EX', EXPIRY_TIME);
+const storeRefreshToken = (userId, token) => redisClient.set(userId, token, { EX: EXPIRY_TIME });
 
 const verifyRefreshToken = async (userId, tokenToVerify) => {
-  const expectedToken = await redis_client.get(userId);
+  if (!userId) {
+    throw new Error('No user ID has been specified.');
+  }
+  
+  if (!tokenToVerify) {
+    throw new Error('No refresh token has been specified.');
+  }
+  
+  const expectedToken = await redisClient.get(userId);
   if (!expectedToken) {
     throw new Error('The refresh token does not exist.');
   }
@@ -22,15 +31,15 @@ const verifyRefreshToken = async (userId, tokenToVerify) => {
   }
 };
 
-const revokeRefreshToken = userId => redis_client.del(userId);
+const revokeRefreshToken = userId => redisClient.del(userId);
 
-const createAccessToken = (payload: { id: any; }) => jwt.sign(payload, key, { algorithm: 'HS256', expiresIn: '2h' });
+const createAccessToken = (payload: { id: any; }) => jwt.sign(payload, key, { algorithm: 'HS256', expiresIn: '15m' });
 
 const exchangeRefreshToken = async (req, res) => {
   const commonErrorMessage = 'An error occurred while exchanging the refresh token.';
 
   const existingRefreshToken = req.headers['x-refresh-token'];
-  const userId = req.body.id;
+  const userId = req.body.id?.toString();
 
   try {
     await verifyRefreshToken(userId, existingRefreshToken);
@@ -65,7 +74,7 @@ const exchangeRefreshToken = async (req, res) => {
   });
 };
 
-module.exports = {
+export {
   createRefreshToken,
   storeRefreshToken,
   verifyRefreshToken,

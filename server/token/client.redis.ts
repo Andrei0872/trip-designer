@@ -1,27 +1,16 @@
-const redis = require('redis');
-const debug = require('debug')('redis');
-const { promisify } = require('util');
+import * as redis from 'redis'
 
-const redisClient = redis.createClient({
-  host: 'redis',
+export const redisClient = redis.createClient({
+  url: 'redis://@redis:6379'
 });
 
 redisClient.connect();
 
-const get = promisify(redisClient.get).bind(redisClient);
-const set = promisify(redisClient.set).bind(redisClient);
-const del = promisify(redisClient.del).bind(redisClient);
 
 redisClient.on('connect', () => {
-  debug('REDIS READY');
+  console.log('REDIS READY');
 });
 
 redisClient.on('error', err => {
-  debug(err)
+  console.log('ERR', err);
 });
-
-module.exports = {
-  get,
-  set,
-  del,
-};
