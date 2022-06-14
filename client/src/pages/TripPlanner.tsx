@@ -7,21 +7,32 @@ import { ActivitiesProvider } from '../context/activities'
 import MainLayout from '../layout/MainLayout'
 import { useRef } from 'react'
 import { ExportData } from '../types/utils'
+import { saveTrip } from '../api/trip'
+import { useUserAuth } from '../context/userAuthContext'
+import { DayActivity } from '../types/activity'
+import { RawTripData } from '../types/trip'
 
 function TripPlanner () {
-  const detailsRef = useRef<ExportData>();
-  const dailyPlannerRef = useRef<ExportData>();
+  const detailsRef = useRef<ExportData<{ otherDetails: RawTripData['otherDetails'] }>>();
+  const dailyPlannerRef = useRef<ExportData<{ dailyActivities: DayActivity[] }>>();
 
-  const collectPlannedTripData = () => {
+  const { user } = useUserAuth();
+
+  const sendPlannedTripData = () => {
     console.log(detailsRef.current?.exportData());
     console.log(dailyPlannerRef.current?.exportData());
+    saveTrip({
+      userId: user.id,
+      dailyActivities: dailyPlannerRef.current?.exportData().dailyActivities,
+      otherDetails: detailsRef.current?.exportData().otherDetails
+    });
   }
 
   return (
     <MainLayout>
       <section className="trip-planner">
         <div className="trip-planner__header">
-          <button onClick={collectPlannedTripData} className="trip-planner__save">Save trip</button>
+          <button onClick={sendPlannedTripData} className="trip-planner__save">Save trip</button>
         </div>
 
         <div className="trip-planner__body">
