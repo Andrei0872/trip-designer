@@ -16,7 +16,7 @@ function Header () {
 
   return (
     <header className="header">
-      <Link className='header__title' to='/'>TripDesigner</Link>
+      <div className='header__title'>TripDesigner</div>
 
       {
         doesUserExist
