@@ -4,6 +4,7 @@ const db = require('./db');
 import cors from 'cors'
 import { jwtMiddleware } from './middlewares/jwt.middleware';
 import { exchangeRefreshToken } from './token/jwt';
+import { SaveTripRequest } from './types/trip';
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -20,26 +21,41 @@ app.post('/refresh', exchangeRefreshToken);
 app.use(jwtMiddleware);
 
 app.post('/save-trip',async(req, res) => {
+  const body = req.body as SaveTripRequest;
+  const { activities, trip, todos } = body;
 
-  const trip = req.body.trip;
-  const activities = req.body.activities; 
+  // const activities = req.body.activities;
   const client = await db.getPool().connect();
   try {
-    const values = Object.values(trip)
-    let res = await client.query(`INSERT INTO trip(${Object.keys(trip).join(', ')}) VALUES($1, $2, $3, $4, $5) RETURNING id`, values)
-    const id = res.rows[0].id;
-    const activities_values = activities.map((a) => ({...a, trip_id:id}));
-    res = await client.query(`INSERT INTO trip_activity(${Object.keys(activities_values[0]).join(', ')}) VALUES ${activities_values.map((a) => `(${Object.values(a)
+    const values = [...Object.values(trip), '', ''];
+    let res = await client.query(`INSERT INTO trip(user_id, start_date, end_date, accommodation_link, transport_link) VALUES($1, $2, $3, $4, $5) RETURNING id`, values)
+    const tripId = res.rows[0].id;
+    
+    const activities_values = activities.map((a) => ({ trip_id: tripId, ...a }));
+    res = await client.query(`INSERT INTO trip_activity(trip_id, activity_id, day_number, hours, note) VALUES ${activities_values.map((a) => `(${Object.values(a)
       .map(v => typeof v === "string" ? `'${v}'` : v)
-    .join(', ')})`)}`)
+    .join(', ')})`)}`);
+
+    const todosValues = todos.map(t => ({ trip_id: tripId, ...t }));
+    await client.query(`INSERT INTO to_do(trip_id, checked, description) VALUES ${
+      todosValues
+        .map(t => `(${Object.values(t)
+        .map(v => typeof v === "string" ? `'${v}'` : v)
+        .join(', ')})`)
+  }`);
+
     console.log(res)
+  } catch (err) {
+    return res.status(400).json({
+      message: 'Something went wrong while saving the trip!',
+    });
   } finally {
     // Make sure to release the client before any error handling,
     // just in case the error handling itself throws an error.
     client.release()
   }
   
-  res.json({ message: 'trip sucessfully added!' })
+  res.status(201).json({ message: 'trip sucessfully added!' })
 })
  
 app.get('/activities', async(req, res) => {
@@ -78,6 +94,28 @@ app.get('/activities-categories', async(req, res) => {
   res.json({data: allCategories.rows[0].enum_range.slice(1,-1).split(',')});
 
   client.release();
+});
+
+app.get('/trips', async (req, res) => {
+  const sqlQuery = `
+    select distinct t.*, a.country, a.city
+    from trip t
+    join trip_activity ta
+      on ta.trip_id = t.id
+    join activity a
+      on ta.activity_id = a.id
+    where t.user_id = $1;
+  `;
+
+  const userId = req.query.userId;
+
+  const client = await db.getPool().connect();
+  try {
+    const result = await client.query(sqlQuery, [userId]);
+    return res.status(200).json({ trips: result.rows });
+  } finally {
+    client.release();
+  }
 });
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

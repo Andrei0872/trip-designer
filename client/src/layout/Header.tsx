@@ -22,7 +22,7 @@ function Header () {
         doesUserExist
           ? <nav className='header__nav'>
               <ul className='header__tabs'>
-                <li className='header__tab'><Link to="/test">Create a trip</Link></li>
+                <li className='header__tab'><Link to="/trip-planner">Create a trip</Link></li>
                 <li className='header__tab'><Link to="/my-trips">My trips</Link></li>
                 <li className='header__tab' onClick={doLogout}><span>Log out</span></li>
               </ul>

@@ -60,8 +60,10 @@ function Details (props: any, ref: any) {
       const otherDetails = getFormDataEntriesAsObject(new FormData(formRef.current!));
       
       return {
-        otherDetails,
-        todos,
+        otherDetails: {
+          ...otherDetails,
+          todos,
+        },
       };
     },
   }));
@@ -100,8 +102,8 @@ function Details (props: any, ref: any) {
             <p className='details__image__country-city'>USA, Los Angeles</p>
           </div>
           <div className='details__dates'>
-            <abbr title="start date"><input className="details__dates__start" type="date" id="start" name="trip-start" defaultValue="2022-05-16"/></abbr>
-            <abbr title="end date"><input className="details__dates__end" type="date" id="end" name="trip-end" defaultValue="2022-05-16"/></abbr>
+            <abbr title="start date"><input className="details__dates__start" type="date" id="start" name="start_date" defaultValue="2022-05-16"/></abbr>
+            <abbr title="end date"><input className="details__dates__end" type="date" id="end" name="end_date" defaultValue="2022-05-16"/></abbr>
           </div>
         </div>
 
