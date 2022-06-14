@@ -10,7 +10,7 @@ const EXPIRY_TIME = 3 * 24 * 60 * 60;
 
 const createRefreshToken = () => randToken.generate(16);
 
-const storeRefreshToken = (userId, token) => redisClient.set(userId, token, { EX: EXPIRY_TIME });
+const storeRefreshToken = (userId, token) => redisClient.set(userId.toString(), token, { EX: EXPIRY_TIME });
 
 const verifyRefreshToken = async (userId, tokenToVerify) => {
   if (!userId) {
@@ -21,7 +21,7 @@ const verifyRefreshToken = async (userId, tokenToVerify) => {
     throw new Error('No refresh token has been specified.');
   }
   
-  const expectedToken = await redisClient.get(userId);
+  const expectedToken = await redisClient.get(userId.toString());
   if (!expectedToken) {
     throw new Error('The refresh token does not exist.');
   }
@@ -31,7 +31,7 @@ const verifyRefreshToken = async (userId, tokenToVerify) => {
   }
 };
 
-const revokeRefreshToken = userId => redisClient.del(userId);
+const revokeRefreshToken = userId => redisClient.del(userId.toString());
 
 const createAccessToken = (payload: { id: any; }) => jwt.sign(payload, key, { algorithm: 'HS256', expiresIn: '15m' });
 
