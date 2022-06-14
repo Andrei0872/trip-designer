@@ -1,6 +1,7 @@
 # Trip Designer
 
 - [Trip Designer](#trip-designer)
+  - [About our app](#about-our-app)
   - [Prerequisites](#prerequisites)
   - [Getting started](#getting-started)
     - [Setting up ENV variables](#setting-up-env-variables)
@@ -19,6 +20,12 @@
     - [Refactoring and code standards](#refactoring-and-code-standards)
     - [Design patterns](#design-patterns)
   - [Visualizing the database with `pgadmin`](#visualizing-the-database-with-pgadmin)
+
+
+## About our app
+&emsp; Do you have a passion for travelling but also a passion for being organized? Then we believe we have the perfect app for you!  
+&emsp; **TripDesigner** is here to help you organize your trips in a very fun and easy way, so that all details are always at hand. From now on, finding activities and organizing them on days, so that you get the most out of your vacation, will not be stressful at all, and most importantly will not include pen and paper. Using drag&drop you will be able to personalize your dream vacation and also keep track of the objectives that you visit (and restaurants too!). Moreover, you will have the opportunity to view your old trips with just a few clicks.  If we haven’t conviced you yet, we have to say that we also have to-do lists so that you will no longer forget to take sunscreen, or worse, a family member 😊. Come check out our app end enjoy the process of trip planning!
+
 
 ## Prerequisites
 
