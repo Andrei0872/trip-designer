@@ -8,13 +8,13 @@ import { getFormDataEntriesAsObject } from '../utils';
 function Todo({ todo, index, checkTodo, removeTodo } : any) {
   return (
     <div
-      className="todo"
+      className="details__todo__todos__todo"
       style={{ textDecoration: todo.isCompleted ? "line-through" : "" }}
     >
       {todo.text}
       <div>
-        <button onClick={() => checkTodo(index)}>{todo.isCompleted ? "Uncheck" : "Check"}</button>
-        <button onClick={() => removeTodo(index)}>x</button>
+        <button className="details__todo__todos__todo__buttonCheck" onClick={() => checkTodo(index)}>{todo.isCompleted ? "Uncheck" : "Check"}</button>
+        <button className="details__todo__todos__todo__buttonRemove" onClick={() => removeTodo(index)}>Remove</button>
       </div>
     </div>
   )
@@ -32,13 +32,13 @@ function TodoForm({addTodo}:any){
 
   return (
     <form onSubmit={handleSubmit}>
-      <input 
+      <input className="details__todo__input"
       type="text"
       value={value}
       onChange={e => setValue(e.target.value)}
       placeholder="Type here..."
       />
-      <input type='submit' value='Add'/>
+      <input className="details__todo__button" type='submit' value='Add'/>
     </form>
   );
 }
@@ -91,7 +91,7 @@ function Details (props: any, ref: any) {
 
   return(
     <div className='details'>
-      <h2 className="">Details</h2>
+      <h2 className="details__title">Details</h2>
 
       <form ref={formRef}>
         <div className='details__cityCountry'>
@@ -115,10 +115,10 @@ function Details (props: any, ref: any) {
         </div> */}
       </form>
 
-      <div>
-        <h3>To do</h3>
+      <div className='details__todo'>
+        <h3 className='details__todo__title'>To do</h3>
         <TodoForm addTodo={addTodo}/>
-        <div>
+        <div className='details__todo__todos'>
           {todos.map((todo,index) => (
             <Todo
             key={index}
