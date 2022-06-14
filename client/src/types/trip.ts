@@ -42,6 +42,7 @@ export interface RawTripData {
 export interface SummarizedTrip {
     accommodation_link: string;
     country: string;
+    city: string;
     end_date: string;
     id: number;
     start_date: string;
