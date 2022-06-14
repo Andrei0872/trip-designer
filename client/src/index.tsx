@@ -10,6 +10,7 @@ import Main from './pages/Main';
 import MyTrips from './pages/MyTrips';
 import { UserAuthProvider } from './context/userAuthContext';
 import UserAuthenticatedGuard from './guards/UserAuthenticatedGuard';
+import UserUnAuthenticatedGuard from './guards/UserUnauthenticatedGuard';
 
 const root = createRoot(document.getElementById('root')!);
 root.render(
@@ -17,9 +18,7 @@ root.render(
     <BrowserRouter>
         <UserAuthProvider>
           <Routes>
-              <Route
-                path="/"
-                element={ <Main /> }
+              <Route path="/" element={ <UserUnAuthenticatedGuard><Main /></UserUnAuthenticatedGuard> }
               />
               <Route path="test" element={<Test />} />
               <Route path="trip-planner" element={ <TripPlanner />} />
