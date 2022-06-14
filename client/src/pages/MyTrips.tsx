@@ -4,6 +4,7 @@ import { useAxios } from "../context/useAxios";
 import { useUserAuth } from "../context/userAuthContext";
 import MainLayout from "../layout/MainLayout";
 import { SummarizedTrip } from "../types/trip";
+import "./MyTrips.scss";
 
 const isTripExpired = (endDate: string) => (new Date()) > (new Date(endDate));
 
@@ -13,30 +14,31 @@ const TripList: React.FC<{ trips: SummarizedTrip[] }> = ({ trips }) => {
   
   return (
     <div className="my-trips">
-      <section>
-        <h2>Upcoming</h2>
-        <ul>
+      <section className="my-trips__upcoming">
+        <h2 className="my-trips__upcoming__title">Upcoming</h2>
+        <ul className="my-trips__upcoming__trips">
         {
           upcomingTrips.map(
             t => 
-              <li key={t.id}>
-                <div>{t.country}</div>
-                <div>{t.start_date} - {t.end_date}</div>
+              <li key={t.id} className="my-trips__upcoming__trips__trip">
+                <div className="my-trips__upcoming__trips__trip__country">{t.country}, {t.city}</div>
+                <div className="my-trips__upcoming__trips__trip__days">{new Date(t.start_date).toLocaleDateString()} - {new Date(t.end_date).toLocaleDateString()}</div>
+                
               </li>
           )
         }
       </ul>
       </section>
 
-      <section>
-      <h2>Previous</h2>
-      <ul>
+      <section className="my-trips__previous">
+      <h2 className="my-trips__previous__title">Previous</h2>
+      <ul className="my-trips__previous__trips" >
       {
         expiredTrips.map(
           t => 
-            <li key={t.id}>
-              <div>{t.country}</div>
-              <div>{t.start_date} - {t.end_date}</div>
+            <li key={t.id} className="my-trips__previous__trips__trip">
+              <div className="my-trips__previous__trips__trip__country" >{t.country}, {t.city}</div>
+              <div className="my-trips__previous__trips__trip__days" >{new Date(t.start_date).toLocaleDateString()} - {new Date(t.end_date).toLocaleDateString()}</div>
             </li>
         )
       }
