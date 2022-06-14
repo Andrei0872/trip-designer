@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { createRoot } from 'react-dom/client';
 import './index.scss';
 import App from './App';
@@ -23,6 +23,7 @@ root.render(
               <Route path="test" element={<Test />} />
               <Route path="trip-planner" element={ <TripPlanner />} />
               <Route path="my-trips" element={<UserAuthenticatedGuard><MyTrips /></UserAuthenticatedGuard> } />
+              <Route path='*' element={ <Navigate to='my-trips' /> } />
           </Routes>
         </UserAuthProvider>
     </BrowserRouter>
