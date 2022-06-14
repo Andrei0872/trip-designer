@@ -7,9 +7,13 @@
     width: 100%;
     height: var(--header-height);
 
-    & a {
+    & a, span {
         color: #fff;
         text-decoration: none;
+    }
+
+    & span {
+        cursor: pointer;
     }
 
     &__title {
