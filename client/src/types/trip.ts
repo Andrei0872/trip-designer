@@ -38,3 +38,12 @@ export interface RawTripData {
     dailyActivities: DayActivity[];
     userId: number;
 }
+
+export interface SummarizedTrip {
+    accommodation_link: string;
+    country: string;
+    end_date: string;
+    id: number;
+    start_date: string;
+    transport_link: string;
+}

@@ -1,4 +1,4 @@
-import { RawTripData, SaveTripRequest } from "../types/trip";
+import { RawTripData, SaveTripRequest, SummarizedTrip } from "../types/trip";
 import { axiosInstance } from "./axios";
 
 export const saveTrip = (rawData: RawTripData) => {
@@ -21,6 +21,13 @@ export const saveTrip = (rawData: RawTripData) => {
         'Content-Type': 'application/json'
     };
 
-    axiosInstance.post('/save-trip', JSON.stringify(body), { headers })
+    return axiosInstance.post('/save-trip', JSON.stringify(body), { headers })
         .then(r => r.data);
 }
+
+export const fetchUserTrips = (userId: number): Promise<SummarizedTrip[]> => {
+    const params = new URLSearchParams([['userId', userId.toString()]]);
+
+    return axiosInstance.get('/trips', { params })
+        .then(r => r.data.trips);
+};
