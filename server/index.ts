@@ -96,4 +96,26 @@ app.get('/activities-categories', async(req, res) => {
   client.release();
 });
 
+app.get('/trips', async (req, res) => {
+  const sqlQuery = `
+    select distinct t.*, a.country, a.city
+    from trip t
+    join trip_activity ta
+      on ta.trip_id = t.id
+    join activity a
+      on ta.activity_id = a.id
+    where t.user_id = $1;
+  `;
+
+  const userId = req.query.userId;
+
+  const client = await db.getPool().connect();
+  try {
+    const result = await client.query(sqlQuery, [userId]);
+    return res.status(200).json({ trips: result.rows });
+  } finally {
+    client.release();
+  }
+});
+
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
