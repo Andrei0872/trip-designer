@@ -21,7 +21,7 @@ function TripPlanner () {
     <MainLayout>
       <section className="trip-planner">
         <div className="trip-planner__header">
-          <button onClick={collectPlannedTripData} className="trip-planner__save">Sign up to save</button>
+          <button onClick={collectPlannedTripData} className="trip-planner__save">Save trip</button>
         </div>
 
         <div className="trip-planner__body">

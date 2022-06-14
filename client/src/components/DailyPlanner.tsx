@@ -120,7 +120,7 @@ const DayActivities: React.FC<DayActivitiesProps> = (props) => {
               </div>
             </li>
         )
-        : 'No activities for this day!'
+        : <p className='noactivities'>No activities for this day!</p>
     }
   </ul>;
 }

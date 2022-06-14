@@ -1,9 +1,9 @@
 .activities {
-  // TODO: temporary
-  border: 1px solid black;
 
   display: flex;
   flex-direction: column;
+  background-color: #e1f0f8;
+  border-left: 3px solid var(--color-sea);
 }
 
 .categories {

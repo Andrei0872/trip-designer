@@ -4,12 +4,13 @@
 //     --color-coral: #ED8C72;
 
 .details {
-    border: 1px solid black;
+    background-color: #e1f0f8;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
     gap: 2rem;
+    border-right: 3px solid var(--color-sea);
 
     &__title{
         color: var(--color-sea);

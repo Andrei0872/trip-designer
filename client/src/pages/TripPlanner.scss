@@ -2,11 +2,30 @@
   display: flex;
   flex-direction: column;
   background-color: white;
+
+  &__save{
+    background-color: var(--color-coral);
+    border: 3px solid whitesmoke;
+    color: whitesmoke;
+    font-size: 1.3rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: 0.3s;
+
+    &:hover{
+      background-color: whitesmoke;
+      border: 3px solid var(--color-coral);
+      color: var(--color-coral);
+    }
+  }
   
   &__header {
-    padding: 2rem;
+    padding: 1rem;
     display: flex;
     justify-content: flex-end;
+    background-color: #bedff1;
+
   }
 
   &__body {
