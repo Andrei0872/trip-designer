@@ -1,3 +1,8 @@
+//     --color-grecian-blue: #2988BC;
+//     --color-sea: #2F496E;
+//     --color-plaster: #F4EADE;
+//     --color-coral: #ED8C72;
+
 .details {
     border: 1px solid black;
     display: flex;
@@ -6,8 +11,41 @@
     justify-content: space-evenly;
 
     &__image {
-        border: 1px solid black;
-        padding: 25%;
+        border: none;
+        
+        &__img{
+            width: 20vw;
+            height: auto;
+        }
+        &__country-city{
+            position: relative;
+            bottom: 55px;
+            left: 10px;
+            color: var(--color-plaster);
+            font-size: 37px;
+            text-shadow: 2px 2px var(--color-coral);
+        }
+    }
+    &__dates{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+
+        &__start{
+            font-size: 20px;
+            color: whitesmoke;
+            background-color: var(--color-grecian-blue);
+            border: 2px solid var(--color-sea);
+            border-radius: 5px;
+        }
+
+        &__end{
+            font-size: 20px;
+            color: whitesmoke;
+            background-color: var(--color-grecian-blue);
+            border: 2px solid var(--color-sea);
+            border-radius: 5px;
+        }
     }
 
    

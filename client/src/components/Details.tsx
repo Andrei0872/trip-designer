@@ -91,27 +91,28 @@ function Details (props: any, ref: any) {
 
   return(
     <div className='details'>
-      <h2>Details</h2>
+      <h2 className="">Details</h2>
 
       <form ref={formRef}>
         <div className='details__cityCountry'>
           <div className='details__image'>
-            Country, City
+            <img className="details__image__img" src="/los_angeles_picture.png" alt='city picture'/>
+            <p className='details__image__country-city'>USA, Los Angeles</p>
           </div>
           <div className='details__dates'>
-            <input type="date" id="start" name="trip-start" defaultValue="2022-05-16"/>
-            <input type="date" id="end" name="trip-end" defaultValue="2022-05-16"/>
+            <abbr title="start date"><input className="details__dates__start" type="date" id="start" name="trip-start" defaultValue="2022-05-16"/></abbr>
+            <abbr title="end date"><input className="details__dates__end" type="date" id="end" name="trip-end" defaultValue="2022-05-16"/></abbr>
           </div>
         </div>
 
-        <div className='details__accommodation'>
+        {/* <div className='details__accommodation'>
           <h3>Accommodation</h3>
           <button type='button'>Add</button>
         </div>
         <div className='details__transport'>
           <h3>Transport</h3>
           <button type='button'>Add</button>
-        </div>
+        </div> */}
       </form>
 
       <div>
