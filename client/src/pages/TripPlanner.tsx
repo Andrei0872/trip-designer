@@ -64,9 +64,19 @@ function LoginToSave (props: {onUserReady: (arg:any) => void}) {
   )
 }
 
+const DAY_IN_MS = 1000 * 60 * 60 * 24;
+
+const computeNrDays = (startDate: string, endDate: string) => {
+  const diffMilliseconds = new Date(endDate).getTime() - new Date(startDate).getTime();
+  
+  return diffMilliseconds / DAY_IN_MS;
+}
+
 function TripPlanner () {
   const detailsRef = useRef<ExportData<{ otherDetails: RawTripData['otherDetails'] }>>();
   const dailyPlannerRef = useRef<ExportData<{ dailyActivities: DayActivity[] }>>();
+
+  const [nrDays, setNrDays] = useState(0);
 
   const { user } = useUserAuth();
 
@@ -79,6 +89,10 @@ function TripPlanner () {
       otherDetails: detailsRef.current?.exportData().otherDetails
     });
   }
+
+  const onDatesChanged = ({ startDate, endDate }) => {
+    setNrDays(computeNrDays(startDate, endDate));
+  };
 
   return (
     <MainLayout>
@@ -95,9 +109,9 @@ function TripPlanner () {
         </div>
 
         <div className="trip-planner__body">
-          <Details ref={detailsRef} />
+          <Details onDatesChanged={onDatesChanged} ref={detailsRef} />
           <ActivitiesProvider>
-            <DailyPlanner ref={dailyPlannerRef} />
+            <DailyPlanner nrDays={nrDays} ref={dailyPlannerRef} />
             <Activities />
           </ActivitiesProvider>
         </div>

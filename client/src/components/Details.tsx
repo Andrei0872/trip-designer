@@ -53,7 +53,19 @@ function Details (props: any, ref: any) {
     isCompleted: false}
   ]);
 
+  const { onDatesChanged } = props;
+
   const formRef = useRef(null);
+
+  const startDateRef = useRef<HTMLInputElement>(null);
+  const endDateRef = useRef<HTMLInputElement>(null);
+
+  const onDateChanged = () => {
+    onDatesChanged({
+      startDate: startDateRef.current.value,
+      endDate: endDateRef.current.value,
+    })
+  }
 
   useImperativeHandle<any, ExportData>(ref, () => ({
     exportData: () => {
@@ -102,8 +114,8 @@ function Details (props: any, ref: any) {
             <p className='details__image__country-city'>USA, Los Angeles</p>
           </div>
           <div className='details__dates'>
-            <abbr title="start date"><input className="details__dates__start" type="date" id="start" name="start_date" defaultValue="2022-05-16"/></abbr>
-            <abbr title="end date"><input className="details__dates__end" type="date" id="end" name="end_date" defaultValue="2022-05-16"/></abbr>
+            <abbr title="start date"><input onChange={onDateChanged} ref={startDateRef} className="details__dates__start" type="date" id="start" name="start_date" defaultValue="2022-05-16"/></abbr>
+            <abbr title="end date"><input onChange={onDateChanged} ref={endDateRef} className="details__dates__end" type="date" id="end" name="end_date" defaultValue="2022-05-16"/></abbr>
           </div>
         </div>
 

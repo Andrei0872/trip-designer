@@ -1,6 +1,6 @@
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { DragEventHandler, forwardRef, SyntheticEvent, useImperativeHandle, useMemo, useReducer, useState } from 'react';
+import { DragEventHandler, forwardRef, SyntheticEvent, useEffect, useImperativeHandle, useMemo, useReducer, useState } from 'react';
 import { useActivities } from '../context/activities';
 import { DayActivity } from '../types/activity';
 import { ExportData } from '../types/utils';
@@ -19,21 +19,25 @@ const Days: React.FC<{ nrDays: number, onSelectedDayNumber: OnSelectedDayNumber 
 
   return (
     <div className="days-wrapper">
-      <ul className="days">
-        {
-          Array.from({ length: nrDays })
-            .map(
-              (_, i) =>
-              <li
-                className={`days__day ${i === selectedDayNumber ? 'days__day--selected' : ''}`}
-                onClick={() => selectDay(i)}
-                key={i}
-              >
-                <span>Day {i + 1}</span>
-              </li>
-            )
-        }
-      </ul>
+      {
+        nrDays > 0
+          ? <ul className="days">
+            {
+              Array.from({ length: nrDays })
+                .map(
+                  (_, i) =>
+                  <li
+                    className={`days__day ${i === selectedDayNumber ? 'days__day--selected' : ''}`}
+                    onClick={() => selectDay(i)}
+                    key={i}
+                  >
+                    <span>Day {i + 1}</span>
+                  </li>
+                  )
+                }
+              </ul>
+          : <p className='no-days'>Please select the start date and end date.</p>
+      }
     </div>
   )
 }
@@ -132,7 +136,8 @@ type DayActivitiesAction =
   | { type: 'add' } & DayActivity
   | { type: 'remove' } & DayActivity
   | { type: 'update' } & DayActivity
-  | { type: 'rearrange' } & ActivityChangedPosition;
+  | { type: 'rearrange' } & ActivityChangedPosition
+  | { type: 'replace' } & { dayActivities: DayActivity[] };
 
 const isTheSameActivity = (a: DayActivity, aTest: DayActivity) => a.dayActivityId === aTest.dayActivityId;
 
@@ -176,6 +181,10 @@ const dailyActivitiesReducer = (state: DayActivitiesState, action: DayActivities
       return newState;
     }
 
+    case 'replace': {
+      return [...action.dayActivities];
+    }
+
     default: {
       throw new Error('Unknown action!');
     }
@@ -198,6 +207,18 @@ function DailyPlanner (props: any, ref: any) {
   const [selectedDayNumber, setSelectedDayNumber] = useState(0);
 
   const { activities } = useActivities();
+
+  useEffect(() => {
+    if (props.nrDays > dailyActivities.length) {
+      return;
+    }
+
+    dispatchDailyActivitiesAction({
+      type: 'replace',
+      dayActivities: dailyActivities.filter(a => a.dayNumber < props.nrDays),
+    });
+
+  }, [props.nrDays]);
 
   useImperativeHandle<ExportData, ExportData>(ref, () => ({
     exportData: () => ({ dailyActivities }),
@@ -248,7 +269,7 @@ function DailyPlanner (props: any, ref: any) {
 
   return (
     <div className="daily-planner">
-      <Days onSelectedDayNumber={setSelectedDayNumber} nrDays={10} />
+      <Days onSelectedDayNumber={setSelectedDayNumber} nrDays={props.nrDays} />
 
       <DayActivities
         onActivityPositionChanged={onActivityPositionChanged}
