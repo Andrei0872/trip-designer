@@ -111,7 +111,7 @@ const DayActivities: React.FC<DayActivitiesProps> = (props) => {
               data-has-pointer-entered={toActivityId === a.dayActivityId && fromActivityId !== a.dayActivityId}
             >
               <div className='day-activities__hours'><input size={5} maxLength={5} type="text" placeholder='HH:mm' value={a.hours} onChange={(ev) => onActivityUpdated({ ...a, hours: ev.target.value })} /></div>
-              <div>{a.activityName}</div>
+              <div className='day-activities__activityName'>{a.activityName}</div>
               <textarea rows={3} className='day-activities__note' value={a.note} onChange={(ev) => onActivityUpdated({ ...a, note: ev.target.value })} placeholder='Add a note'></textarea>
               <div className="day-activities__actions">
                 <button onClick={() => onActivityDeleted(a)} className='day-activities__action day-activities__action--delete'>
