@@ -16,7 +16,7 @@ end_date DATE NOT NULL,
 accommodation_link VARCHAR(500),
 transport_link VARCHAR(500),
 CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES "user"(id) ON DELETE CASCADE,
-CHECK (start_date < end_date)
+CHECK (start_date <= end_date)
 );
 
 CREATE TABLE to_do (
