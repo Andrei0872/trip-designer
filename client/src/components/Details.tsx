@@ -8,13 +8,13 @@ import { getFormDataEntriesAsObject } from '../utils';
 function Todo({ todo, index, checkTodo, removeTodo } : any) {
   return (
     <div
-      className="todo"
+      className="details__todo__todos__todo"
       style={{ textDecoration: todo.isCompleted ? "line-through" : "" }}
     >
       {todo.text}
       <div>
-        <button onClick={() => checkTodo(index)}>{todo.isCompleted ? "Uncheck" : "Check"}</button>
-        <button onClick={() => removeTodo(index)}>x</button>
+        <button className="details__todo__todos__todo__buttonCheck" onClick={() => checkTodo(index)}>{todo.isCompleted ? "Uncheck" : "Check"}</button>
+        <button className="details__todo__todos__todo__buttonRemove" onClick={() => removeTodo(index)}>Remove</button>
       </div>
     </div>
   )
@@ -32,13 +32,13 @@ function TodoForm({addTodo}:any){
 
   return (
     <form onSubmit={handleSubmit}>
-      <input 
+      <input className="details__todo__input"
       type="text"
       value={value}
       onChange={e => setValue(e.target.value)}
       placeholder="Type here..."
       />
-      <input type='submit' value='Add'/>
+      <input className="details__todo__button" type='submit' value='Add'/>
     </form>
   );
 }
@@ -91,33 +91,34 @@ function Details (props: any, ref: any) {
 
   return(
     <div className='details'>
-      <h2>Details</h2>
+      <h2 className="details__title">Details</h2>
 
       <form ref={formRef}>
         <div className='details__cityCountry'>
           <div className='details__image'>
-            Country, City
+            <img className="details__image__img" src="/los_angeles_picture.png" alt='city picture'/>
+            <p className='details__image__country-city'>USA, Los Angeles</p>
           </div>
           <div className='details__dates'>
-            <input type="date" id="start" name="trip-start" defaultValue="2022-05-16"/>
-            <input type="date" id="end" name="trip-end" defaultValue="2022-05-16"/>
+            <abbr title="start date"><input className="details__dates__start" type="date" id="start" name="trip-start" defaultValue="2022-05-16"/></abbr>
+            <abbr title="end date"><input className="details__dates__end" type="date" id="end" name="trip-end" defaultValue="2022-05-16"/></abbr>
           </div>
         </div>
 
-        <div className='details__accommodation'>
+        {/* <div className='details__accommodation'>
           <h3>Accommodation</h3>
           <button type='button'>Add</button>
         </div>
         <div className='details__transport'>
           <h3>Transport</h3>
           <button type='button'>Add</button>
-        </div>
+        </div> */}
       </form>
 
-      <div>
-        <h3>To do</h3>
+      <div className='details__todo'>
+        <h3 className='details__todo__title'>To do</h3>
         <TodoForm addTodo={addTodo}/>
-        <div>
+        <div className='details__todo__todos'>
           {todos.map((todo,index) => (
             <Todo
             key={index}

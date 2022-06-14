@@ -1,19 +1,103 @@
+//     --color-grecian-blue: #2988BC;
+//     --color-sea: #2F496E;
+//     --color-plaster: #F4EADE;
+//     --color-coral: #ED8C72;
+
 .details {
-    border: 1px solid black;
+    background-color: #e1f0f8;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: flex-start;
+    gap: 2rem;
+    border-right: 3px solid var(--color-sea);
+
+    &__title{
+        color: var(--color-sea);
+        font-size: 35px;
+        position: relative;
+        right: 10px;
+    }
 
     &__image {
-        border: 1px solid black;
-        padding: 25%;
+        border: none;
+        
+        &__img{
+            width: 20rem;
+            height: auto;
+            border-radius: 6px;
+        }
+        &__country-city{
+            position: relative;
+            bottom: 3.5rem;
+            left: 0.5rem;
+            color: var(--color-plaster);
+            font-size: 2.5rem;
+            text-shadow: 2px 2px var(--color-coral);
+        }
+    }
+    &__dates{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+
+        &__start{
+            font-size: 20px;
+            color: whitesmoke;
+            background-color: var(--color-grecian-blue);
+            border: 2px solid var(--color-sea);
+            border-radius: 5px;
+        }
+
+        &__end{
+            font-size: 20px;
+            color: whitesmoke;
+            background-color: var(--color-grecian-blue);
+            border: 2px solid var(--color-sea);
+            border-radius: 5px;
+        }
+    }
+
+    &__todo{
+        border: none;
+        &__input{
+            border: 2px solid var(--color-sea);
+            border-radius: 3px;
+        }
+        &__button{
+            border-radius: 5px;
+            width: 50px;
+            background-color: var(--color-grecian-blue);
+            color: whitesmoke;
+            border: 2px solid var(--color-sea);
+        }
+        &__title{
+            text-align: center;
+            color: var(--color-sea);
+        }
+        &__todos{
+            border: none;
+            &__todo {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+
+                &__buttonCheck{
+                    border-radius: 5px;
+                    background-color: var(--color-grecian-blue);
+                    color: whitesmoke;
+                    border: 2px solid var(--color-sea);
+                }
+                &__buttonRemove{
+                    border-radius: 5px;
+                    background-color: var(--color-grecian-blue);
+                    color: whitesmoke;
+                    border: 2px solid var(--color-sea);
+
+                }
+            }
+        }
     }
 
    
   }
-.todo {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-}

@@ -6,6 +6,7 @@
     position: fixed;
     width: 100%;
     height: var(--header-height);
+    z-index: 3;
 
     & a, span {
         color: #fff;

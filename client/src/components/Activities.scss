@@ -1,9 +1,9 @@
 .activities {
-  // TODO: temporary
-  border: 1px solid black;
 
   display: flex;
   flex-direction: column;
+  background-color: #e1f0f8;
+  border-left: 3px solid var(--color-sea);
 }
 
 .categories {
@@ -15,13 +15,17 @@
   padding: .5rem;
 
   &__category {
-    border: 1px solid aqua;
+    border: 2px solid var(--color-sea);
     padding: .4rem .6rem;
     border-radius: 5px;
     cursor: pointer;
+    color: var(--color-sea);
+    font-size: 20px;
+    transition: 0.3s;
 
     &:hover, &--selected {
-      background-color: aliceblue;
+      background-color: var(--color-grecian-blue);
+      color: whitesmoke;
     }
   }
 }
@@ -39,6 +43,10 @@
 
   &__title {
     text-align: center;
+    color: var(--color-sea);
+    font-size: 25px;
+    position: relative;
+    right: 10px;
   }
 
   &__body {
@@ -48,7 +56,7 @@
     flex-direction: column;
     align-items: center;
     overflow-y: auto;
-    row-gap: 2.5rem;
+    row-gap: 1.5rem;
     padding-block: 1rem;
   }
 
@@ -56,8 +64,18 @@
     width: 80%;
     text-align: center;
     padding-block: .9rem;
-    border: 3px solid darkblue;
-    border-radius: 6px;
+    border: 4px solid whitesmoke;
+    background-color: var(--color-sea);
+    color: whitesmoke;
+    border-radius: 10px;
+    transition: 0.3s;
+
+    &:hover{
+      border: 4px solid var(--color-sea);
+      color: var(--color-sea);
+      background-color: whitesmoke;
+    }
+    
   }
 }
 
