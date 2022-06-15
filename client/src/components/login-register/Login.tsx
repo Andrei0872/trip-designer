@@ -5,7 +5,7 @@ import { useAxios } from "../../context/useAxios";
 import { useUserAuth } from "../../context/userAuthContext";
 import "./LoginRegister.scss"
 
-function Login() {
+function Login(props: {onUserLogin?: (arg:any) => void}) {
     const { setUser } = useUserAuth();
     const navigate = useNavigate();
 
@@ -16,6 +16,7 @@ function Login() {
         loginUser(new FormData(formElement))
             .then(u => {
                 setUser(u);
+                props.onUserLogin(u);
                 navigate("my-trips");
             });
     }

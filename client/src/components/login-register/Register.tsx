@@ -4,7 +4,7 @@ import { registerUser } from "../../api/user";
 import { useUserAuth } from "../../context/userAuthContext";
 import "./LoginRegister.scss"
 
-function Register() {
+function Register(props: {onUserRegister?: (arg:any) => void}) {
     const { setUser } = useUserAuth();
     const navigate = useNavigate();
     
@@ -15,6 +15,7 @@ function Register() {
         registerUser(new FormData(formElement))
             .then(u => {
                 setUser(u);
+                props.onUserRegister(u);
                 navigate("my-trips");
             })
     }

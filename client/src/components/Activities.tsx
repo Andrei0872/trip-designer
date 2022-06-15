@@ -117,7 +117,7 @@ interface ActivitiesProps {
 function Activities (props: ActivitiesProps) {
   const { alreadySelectedCategories = DEFAULT_SELECTED_CATEGORIES } = props;
 
-  useAxios();
+  //useAxios();
 
   const [selectedCategoriesMap, setSelectedCategoriesMap] = useState<SelectedCategories>({});
   const { activities, setActivities } = useActivities();

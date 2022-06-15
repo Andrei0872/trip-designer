@@ -18,6 +18,44 @@ app.use('/user', userController);
 
 app.post('/refresh', exchangeRefreshToken);
 
+app.get('/activities', async(req, res) => {
+
+  let rawFilter = req.query.filter || 'all';
+
+  let filters = rawFilter.split(',').map(a => `'${a}'`);
+ 
+  const client = await db.getPool().connect();
+  let result;
+  try {
+    if(rawFilter == 'all')
+    { result = await client.query(`SELECT * FROM activity`);
+   
+    }
+    else{
+      result = await client.query(`SELECT * FROM activity WHERE 
+      activity.category && ARRAY[${filters}]::category[];`);
+   
+    }
+    
+  } finally {
+    // Make sure to release the client before any error handling,
+    // just in case the error handling itself throws an error.
+    client.release()
+  }
+
+  res.json({ message: 'filtering performed successfully!', 
+            data: result.rows})
+}
+);
+
+app.get('/activities-categories', async(req, res) => {
+  const client = await db.getPool().connect();
+  let allCategories= await client.query('SELECT enum_range(NULL::category)');
+  res.json({data: allCategories.rows[0].enum_range.slice(1,-1).split(',')});
+
+  client.release();
+});
+
 app.use(jwtMiddleware);
 
 app.post('/save-trip',async(req, res) => {
@@ -58,43 +96,8 @@ app.post('/save-trip',async(req, res) => {
   res.status(201).json({ message: 'trip sucessfully added!' })
 })
  
-app.get('/activities', async(req, res) => {
 
-  let rawFilter = req.query.filter || 'all';
 
-  let filters = rawFilter.split(',').map(a => `'${a}'`);
- 
-  const client = await db.getPool().connect();
-  let result;
-  try {
-    if(rawFilter == 'all')
-    { result = await client.query(`SELECT * FROM activity`);
-   
-    }
-    else{
-      result = await client.query(`SELECT * FROM activity WHERE 
-      activity.category && ARRAY[${filters}]::category[];`);
-   
-    }
-    
-  } finally {
-    // Make sure to release the client before any error handling,
-    // just in case the error handling itself throws an error.
-    client.release()
-  }
-
-  res.json({ message: 'filtering performed successfully!', 
-            data: result.rows})
-}
-);
-
-app.get('/activities-categories', async(req, res) => {
-  const client = await db.getPool().connect();
-  let allCategories= await client.query('SELECT enum_range(NULL::category)');
-  res.json({data: allCategories.rows[0].enum_range.slice(1,-1).split(',')});
-
-  client.release();
-});
 
 app.get('/trips', async (req, res) => {
   const sqlQuery = `
