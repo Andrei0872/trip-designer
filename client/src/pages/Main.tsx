@@ -3,6 +3,7 @@ import "./Main.scss";
 import Login from "../components/login-register/Login";
 import Register from "../components/login-register/Register";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 function Main() {
   const [isShownLogin, setIsShownLogin] = useState(true);
@@ -38,7 +39,7 @@ function Main() {
           </video>
           <div className="mainp__inspirational"> 
             <h1 className="mainp__inspirational__sentence">Dare to live <br/> <i> the life </i> <br/> you've always wanted</h1>
-            <button className="mainp__inspirational__startbutton">Start the adventure!</button> 
+            <Link to="/trip-planner"><button className="mainp__inspirational__startbutton">Start the adventure!</button></Link>
           </div>
 
           <div className="mainp__right"> 
