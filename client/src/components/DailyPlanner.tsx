@@ -116,6 +116,10 @@ function DailyPlanner (props: any, ref: any) {
     // TODO: adapt for Backend when the time comes.
     const activity = activities.find(a => +a.id === +activityId);
 
+    if (!activity) {
+      return;
+    }
+
     dispatchDailyActivitiesAction({
       type: 'add',
       ...dayActivityCreateDefault({
