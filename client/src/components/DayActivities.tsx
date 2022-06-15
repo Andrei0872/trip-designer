@@ -13,6 +13,7 @@ export interface DayActivitiesProps {
   onActivityDeleted: (a: DayActivity) => void;
   onActivityPositionChanged: (position: ActivityChangedPosition) => void;
   activities: DayActivity[];
+  isReadonly?: boolean;
 }
 export const DayActivities: React.FC<DayActivitiesProps> = (props) => {
   const {
@@ -21,6 +22,7 @@ export const DayActivities: React.FC<DayActivitiesProps> = (props) => {
     onActivityDeleted,
     onActivityPositionChanged,
     activities,
+    isReadonly = false
   } = props;
 
   const [fromActivityId, setFromActivityId] = useState('');
@@ -68,23 +70,33 @@ export const DayActivities: React.FC<DayActivitiesProps> = (props) => {
         ? activities.map(
           (a, i) =>
             <li
-              onDragEnd={() => onPointerUp(a)}
-              onPointerLeave={() => onPointerLeave()}
-              onDragEnter={() => onPointerEnter(a.dayActivityId)}
-              onDragStart={() => onPointerDown(a.dayActivityId)}
+              {
+                ...isReadonly
+                  ? undefined
+                  : {
+                    onDragEnd:() => onPointerUp(a),
+                    onPointerLeave:() => onPointerLeave(),
+                    onDragEnter:() => onPointerEnter(a.dayActivityId),
+                    onDragStart:() => onPointerDown(a.dayActivityId),
+                  }
+              }
               draggable='true'
               data-index={i + 1}
               key={a.activityId + ':' + a.dayNumber + ':' + i}
               className='day-activities__activity'
               data-has-pointer-entered={toActivityId === a.dayActivityId && fromActivityId !== a.dayActivityId}
             >
-              <div className='day-activities__hours'><input size={5} maxLength={5} type="text" placeholder='HH:mm' value={a.hours} onChange={(ev) => onActivityUpdated({ ...a, hours: ev.target.value })} /></div>
+              <div className='day-activities__hours'><input readOnly={isReadonly} size={5} maxLength={5} type="text" placeholder='HH:mm' value={a.hours} onChange={(ev) => onActivityUpdated({ ...a, hours: ev.target.value })} /></div>
               <div className='day-activities__activityName'>{a.activityName}</div>
-              <textarea rows={3} className='day-activities__note' value={a.note} onChange={(ev) => onActivityUpdated({ ...a, note: ev.target.value })} placeholder='Add a note'></textarea>
+              <textarea readOnly={isReadonly} rows={3} className='day-activities__note' value={a.note} onChange={(ev) => onActivityUpdated({ ...a, note: ev.target.value })} placeholder='Add a note'></textarea>
               <div className="day-activities__actions">
-                <button onClick={() => onActivityDeleted(a)} className='day-activities__action day-activities__action--delete'>
-                  <FontAwesomeIcon fontSize={'.9rem'} icon={faTrashCan} />
-                </button>
+                {
+                  isReadonly
+                    ? null
+                    : <button onClick={() => onActivityDeleted(a)} className='day-activities__action day-activities__action--delete'>
+                      <FontAwesomeIcon fontSize={'.9rem'} icon={faTrashCan} />
+                    </button>
+                }
               </div>
             </li>
         )
