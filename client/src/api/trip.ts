@@ -1,7 +1,9 @@
-import { RawTripData, SaveTripRequest, SummarizedTrip } from "../types/trip";
+import { ACCESS_TOKEN_HEADER } from "../context/useAxios";
+import { InspectedTrip, RawTripData, SaveTripRequest, SummarizedTrip } from "../types/trip";
+import { User } from "../types/user";
 import { axiosInstance } from "./axios";
 
-export const saveTrip = (rawData: RawTripData) => {
+export const saveTrip = (rawData: RawTripData, barelyCreatedUser?: User) => {
     const body: SaveTripRequest = {
         activities: rawData.dailyActivities.map(
             a => ({
@@ -21,6 +23,11 @@ export const saveTrip = (rawData: RawTripData) => {
         'Content-Type': 'application/json'
     };
 
+    const shouldManuallyAddToken = !!barelyCreatedUser;
+    if (shouldManuallyAddToken) {
+        headers[ACCESS_TOKEN_HEADER] = barelyCreatedUser.token;
+    }
+
     return axiosInstance.post('/save-trip', JSON.stringify(body), { headers })
         .then(r => r.data);
 }
@@ -31,3 +38,8 @@ export const fetchUserTrips = (userId: number): Promise<SummarizedTrip[]> => {
     return axiosInstance.get('/trips', { params })
         .then(r => r.data.trips);
 };
+
+export const fetchTripWithID = (tripId: number): Promise<InspectedTrip> => {
+    return axiosInstance.get(`/trips/${tripId}`)
+        .then(r => r.data)
+}

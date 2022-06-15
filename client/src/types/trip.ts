@@ -48,3 +48,8 @@ export interface SummarizedTrip {
     start_date: string;
     transport_link: string;
 }
+
+export interface InspectedTrip {
+    tripTodos: any[];
+    tripActivities: any[];
+}
