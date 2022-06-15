@@ -84,6 +84,7 @@ app.post('/save-trip',async(req, res) => {
 
     console.log(res)
   } catch (err) {
+    console.log(err)
     return res.status(400).json({
       message: 'Something went wrong while saving the trip!',
     });
@@ -119,6 +120,55 @@ app.get('/trips', async (req, res) => {
   } finally {
     client.release();
   }
+});
+
+app.get('/trips/:id', async (req, res) => {
+  const tripId = req.params.id;
+  
+  const tripTodosSql = `
+    select td.*
+    from trip t
+    join to_do td
+      on td.trip_id = t.id
+    where t.id = $1;
+  `;
+
+  const tripActivitiesSql = `
+    select ac.city, ac."name", ac.country, t.start_date, t.end_date, ta.day_number, ta.hours, ta.note
+    from trip t
+    join trip_activity ta
+      on ta.trip_id = t.id
+    join activity ac
+      on ac.id = ta.activity_id
+    where t.id = $1;
+  `;
+
+  const client = await db.getPool().connect();
+
+  try {
+    const { rows: tripTodos } = await client.query(tripTodosSql, [tripId]);
+
+    const { rows: tripActivities } = await client.query(tripActivitiesSql, [tripId]);
+
+    if (!tripActivities.length) {
+      return res.status(400).json({
+        message: `This trip most likely doesn't exist!`,
+      });
+    }
+
+    res.status(200).json({
+      tripTodos,
+      tripActivities,
+    });
+
+  } catch (err) {
+    return res.status(400).json({
+      message: 'An error occurred while fetching the trip data!',
+    });
+  } finally {
+    client.release();
+  }
+
 });
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
