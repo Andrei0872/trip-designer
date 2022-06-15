@@ -14,6 +14,9 @@ import { RawTripData } from '../types/trip'
 import Login from "../components/login-register/Login";
 import Register from "../components/login-register/Register";
 import Popup from 'reactjs-popup';
+import { useAxios } from '../context/useAxios'
+import { computeNrDays } from '../utils'
+import { useNavigate } from 'react-router-dom'
 
 function LoginToSave (props: {onUserReady: (arg:any) => void}) {
   const [isShownLogin, setIsShownLogin] = useState(true);
@@ -64,14 +67,6 @@ function LoginToSave (props: {onUserReady: (arg:any) => void}) {
   )
 }
 
-const DAY_IN_MS = 1000 * 60 * 60 * 24;
-
-const computeNrDays = (startDate: string, endDate: string) => {
-  const diffMilliseconds = new Date(endDate).getTime() - new Date(startDate).getTime();
-  
-  return diffMilliseconds / DAY_IN_MS;
-}
-
 function TripPlanner () {
   const detailsRef = useRef<ExportData<{ otherDetails: RawTripData['otherDetails'] }>>();
   const dailyPlannerRef = useRef<ExportData<{ dailyActivities: DayActivity[] }>>();
@@ -80,14 +75,18 @@ function TripPlanner () {
 
   const { user } = useUserAuth();
 
+  const navigate = useNavigate();
+
   const sendPlannedTripData = (barelyReadyUser:any) => {
     console.log(detailsRef.current?.exportData());
     console.log(dailyPlannerRef.current?.exportData());
+
     saveTrip({
       userId: (user || barelyReadyUser).id,
       dailyActivities: dailyPlannerRef.current?.exportData().dailyActivities,
       otherDetails: detailsRef.current?.exportData().otherDetails
-    });
+    }, user || barelyReadyUser)
+      .then(() => navigate('/my-trips'))
   }
 
   const onDatesChanged = ({ startDate, endDate }) => {
