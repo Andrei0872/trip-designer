@@ -15,7 +15,7 @@ import Login from "../components/login-register/Login";
 import Register from "../components/login-register/Register";
 import Popup from 'reactjs-popup';
 
-function LoginToSave () {
+function LoginToSave (props: {onUserReady: (arg:any) => void}) {
   const [isShownLogin, setIsShownLogin] = useState(true);
   const [isShownRegister, setIsShownRegister] = useState(false);
   const handleClickLog = (e: any) => {
@@ -41,6 +41,12 @@ function LoginToSave () {
     color: "#F4EADE",
     backgroundColor: "#2988BC"
   }
+
+  const saveTripForUser = (user:any) => {
+    props.onUserReady(user);
+
+  }
+
   return (
     <div className="mainp__right" id='mytrips_loginregister'> 
             <div className="mainp__right__buttons">
@@ -49,10 +55,10 @@ function LoginToSave () {
             </div>
 
             <div className="mainp__right__form">
-              {isShownLogin && <Login/>}
+              {isShownLogin && <Login onUserLogin={saveTripForUser}/>}
             </div>
             <div className="mainp__right__form">
-              {isShownRegister && <Register/>}
+              {isShownRegister && <Register onUserRegister={saveTripForUser}/>}
             </div>
           </div>
   )
@@ -64,11 +70,11 @@ function TripPlanner () {
 
   const { user } = useUserAuth();
 
-  const sendPlannedTripData = () => {
+  const sendPlannedTripData = (barelyReadyUser:any) => {
     console.log(detailsRef.current?.exportData());
     console.log(dailyPlannerRef.current?.exportData());
     saveTrip({
-      userId: user.id,
+      userId: (user || barelyReadyUser).id,
       dailyActivities: dailyPlannerRef.current?.exportData().dailyActivities,
       otherDetails: detailsRef.current?.exportData().otherDetails
     });
@@ -80,7 +86,7 @@ function TripPlanner () {
         <div className="trip-planner__header">
           { user === null ?
             <Popup trigger={<button className='trip-planner__save'>Login/Register to Save</button>} modal>
-              <LoginToSave/>
+              <LoginToSave onUserReady={(user) => sendPlannedTripData(user)}/>
             </Popup>
             :
             <button onClick={sendPlannedTripData} className="trip-planner__save">Save trip</button>

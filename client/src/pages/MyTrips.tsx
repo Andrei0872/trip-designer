@@ -62,11 +62,12 @@ function MyTrips() {
 
   return (
     <MainLayout>
-      {
+      <TripList trips={trips ? trips : []} />
+      {/* {
         trips?.length
           ? <TripList trips={trips} />
           : <p>No trips yet.</p>
-      }
+      } */}
     </MainLayout>
   )
 }
