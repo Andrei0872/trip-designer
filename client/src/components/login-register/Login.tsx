@@ -16,7 +16,7 @@ function Login(props: {onUserLogin?: (arg:any) => void}) {
         loginUser(new FormData(formElement))
             .then(u => {
                 setUser(u);
-                props.onUserLogin(u);
+                props.onUserLogin?.(u);
                 navigate("my-trips");
             });
     }

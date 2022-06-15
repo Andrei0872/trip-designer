@@ -3,14 +3,14 @@ import './Days.scss'
 import { useState } from "react";
 
 export type OnSelectedDayNumber = (d: number) => void;
-export const Days: React.FC<{ nrDays: number, onSelectedDayNumber: OnSelectedDayNumber }> = (props) => {
+export const Days: React.FC<{ nrDays: number, onSelectedDayNumber?: OnSelectedDayNumber }> = (props) => {
   const { nrDays, onSelectedDayNumber } = props;
 
   const [selectedDayNumber, setSelectedDayNumber] = useState(0);
 
   const selectDay = (dayNumber: number) => {
     setSelectedDayNumber(dayNumber);
-    onSelectedDayNumber(dayNumber);
+    onSelectedDayNumber?.(dayNumber);
   }
 
   return (

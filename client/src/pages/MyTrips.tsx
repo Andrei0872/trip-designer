@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { fetchUserTrips } from "../api/trip";
 import { useAxios } from "../context/useAxios";
 import { useUserAuth } from "../context/userAuthContext";
@@ -9,9 +10,11 @@ import "./MyTrips.scss";
 const isTripExpired = (endDate: string) => (new Date()) > (new Date(endDate));
 
 const TripList: React.FC<{ trips: SummarizedTrip[] }> = ({ trips }) => {
-  const expiredTrips = useMemo(() => trips.filter(t => isTripExpired(t.end_date)), []);
-  const upcomingTrips = useMemo(() => trips.filter(t => !isTripExpired(t.end_date)), []);
+  const expiredTrips = useMemo(() => trips.filter(t => isTripExpired(t.end_date)), [trips.length]);
+  const upcomingTrips = useMemo(() => trips.filter(t => !isTripExpired(t.end_date)), [trips.length]);
   
+  const navigate = useNavigate();
+
   return (
     <div className="my-trips">
       <section className="my-trips__upcoming">
@@ -20,7 +23,7 @@ const TripList: React.FC<{ trips: SummarizedTrip[] }> = ({ trips }) => {
         {
           upcomingTrips.map(
             t => 
-              <li key={t.id} className="my-trips__upcoming__trips__trip">
+              <li onClick={() => navigate(`/my-trips/${t.id}`)} key={t.id} className="my-trips__upcoming__trips__trip">
                 <div className="my-trips__upcoming__trips__trip__country">{t.country}, {t.city}</div>
                 <div className="my-trips__upcoming__trips__trip__days">{new Date(t.start_date).toLocaleDateString()} - {new Date(t.end_date).toLocaleDateString()}</div>
                 
@@ -36,7 +39,7 @@ const TripList: React.FC<{ trips: SummarizedTrip[] }> = ({ trips }) => {
       {
         expiredTrips.map(
           t => 
-            <li key={t.id} className="my-trips__previous__trips__trip">
+            <li onClick={() => navigate(`/my-trips/${t.id}`)} key={t.id} className="my-trips__previous__trips__trip">
               <div className="my-trips__previous__trips__trip__country" >{t.country}, {t.city}</div>
               <div className="my-trips__previous__trips__trip__days" >{new Date(t.start_date).toLocaleDateString()} - {new Date(t.end_date).toLocaleDateString()}</div>
             </li>
