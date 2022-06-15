@@ -11,6 +11,7 @@ import MyTrips from './pages/MyTrips';
 import { UserAuthProvider } from './context/userAuthContext';
 import UserAuthenticatedGuard from './guards/UserAuthenticatedGuard';
 import UserUnAuthenticatedGuard from './guards/UserUnauthenticatedGuard';
+import IndividualTrip from './pages/IndividualTrip';
 
 const root = createRoot(document.getElementById('root')!);
 root.render(
@@ -22,7 +23,8 @@ root.render(
               />
               <Route path="test" element={<Test />} />
               <Route path="trip-planner" element={ <TripPlanner />} />
-              <Route path="my-trips" element={<UserAuthenticatedGuard><MyTrips /></UserAuthenticatedGuard> } />
+              <Route path="my-trips" element={ <UserAuthenticatedGuard><MyTrips /></UserAuthenticatedGuard> } />
+              <Route path="my-trips/:id" element={ <UserAuthenticatedGuard><IndividualTrip /></UserAuthenticatedGuard> } />
               <Route path='*' element={ <Navigate to='my-trips' /> } />
           </Routes>
         </UserAuthProvider>

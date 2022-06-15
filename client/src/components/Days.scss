@@ -1,0 +1,42 @@
+.days-wrapper {
+    position: relative;
+    width: 100%;
+    min-height: 3rem;
+}
+
+.days {
+    list-style: none;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    border-bottom: 1px solid var(--color-sea);
+    border-top: 2px solid var(--color-sea);
+    overflow-x: auto;
+    position: absolute;
+    inset: 0;
+    background-color: #e1f0f8;
+
+    &__day {
+        display: flex;
+        place-items: center;
+        cursor: pointer;
+        padding-inline: 1rem;
+        color: var(--color-sea);
+        background-color: #e1f0f8;
+        transition: 0.3s;
+
+        &>span {
+            width: max-content;
+        }
+
+        &--selected,
+        &:hover {
+            background-color: var(--color-grecian-blue);
+            color: whitesmoke;
+        }
+
+        &:not(:last-child) {
+            border-right: 2px solid var(--color-sea);
+        }
+    }
+}

@@ -15,7 +15,7 @@ function Register(props: {onUserRegister?: (arg:any) => void}) {
         registerUser(new FormData(formElement))
             .then(u => {
                 setUser(u);
-                props.onUserRegister(u);
+                props.onUserRegister?.(u);
                 navigate("my-trips");
             })
     }

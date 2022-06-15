@@ -1,130 +1,14 @@
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { DragEventHandler, forwardRef, SyntheticEvent, useImperativeHandle, useMemo, useReducer, useState } from 'react';
+import { DragEventHandler, forwardRef, SyntheticEvent, useEffect, useImperativeHandle, useMemo, useReducer, useState } from 'react';
 import { useActivities } from '../context/activities';
 import { DayActivity } from '../types/activity';
 import { ExportData } from '../types/utils';
 import './DailyPlanner.scss'
+import { ActivityChangedPosition, DayActivities } from './DayActivities';
+import { Days } from './Days';
 
-type OnSelectedDayNumber = (d: number) => void;
-const Days: React.FC<{ nrDays: number, onSelectedDayNumber: OnSelectedDayNumber }> = (props) => {
-  const { nrDays, onSelectedDayNumber } = props;
 
-  const [selectedDayNumber, setSelectedDayNumber] = useState(0);
-
-  const selectDay = (dayNumber: number) => {
-    setSelectedDayNumber(dayNumber);
-    onSelectedDayNumber(dayNumber);
-  }
-
-  return (
-    <div className="days-wrapper">
-      <ul className="days">
-        {
-          Array.from({ length: nrDays })
-            .map(
-              (_, i) =>
-              <li
-                className={`days__day ${i === selectedDayNumber ? 'days__day--selected' : ''}`}
-                onClick={() => selectDay(i)}
-                key={i}
-              >
-                <span>Day {i + 1}</span>
-              </li>
-            )
-        }
-      </ul>
-    </div>
-  )
-}
-
-type OnActivityDropped = DragEventHandler<any>;
-type ActivityChangedPosition = { fromActivityId: string, toActivityId: string };
-interface DayActivitiesProps {
-  onActivityDropped: OnActivityDropped;
-  onActivityUpdated: (a: DayActivity) => void;
-  onActivityDeleted: (a: DayActivity) => void;
-  onActivityPositionChanged: (position: ActivityChangedPosition) => void;
-  activities: DayActivity[];
-}
-const DayActivities: React.FC<DayActivitiesProps> = (props) => {
-  const {
-    onActivityDropped,
-    onActivityUpdated,
-    onActivityDeleted,
-    onActivityPositionChanged,
-    activities,
-  } = props;
-
-  const [fromActivityId, setFromActivityId] = useState('');
-  const [toActivityId, setToActivityId] = useState('');
-
-  const onDrop: DragEventHandler<any> = ev => {
-    const isRearrangingDayActivities = !!fromActivityId;
-    if (!isRearrangingDayActivities) {
-      onActivityDropped(ev);
-    }
-  } 
-
-  const onPointerDown = (activityId: string) => {
-    setFromActivityId(activityId);
-  };
-
-  const onPointerEnter = (activityId: string) => {
-    setToActivityId(activityId);
-
-  };
-
-  const onPointerLeave = () => {
-    setFromActivityId('');
-    setToActivityId('');
-  };
-
-  const onPointerUp = (a: DayActivity) => {
-    const hasActivityChangedPosition = !!fromActivityId && !!toActivityId && fromActivityId !== toActivityId;
-    if (hasActivityChangedPosition) {
-      onActivityPositionChanged({ fromActivityId, toActivityId });
-    }
-    
-    setFromActivityId('');
-    setToActivityId('');
-  }
-
-  return <ul
-    onDragOver={e => e.preventDefault()}
-    onDrop={onDrop}
-    className='day-activities'
-    data-is-empty={activities.length === 0}
-  >
-    {
-      activities.length
-        ? activities.map(
-          (a, i) => 
-            <li
-              onDragEnd={() => onPointerUp(a)}
-              onPointerLeave={() => onPointerLeave()}
-              onDragEnter={() => onPointerEnter(a.dayActivityId)}
-              onDragStart={() => onPointerDown(a.dayActivityId)}
-              draggable='true'
-              data-index={i + 1}
-              key={a.activityId + ':' + a.dayNumber + ':' + i}
-              className='day-activities__activity'
-              data-has-pointer-entered={toActivityId === a.dayActivityId && fromActivityId !== a.dayActivityId}
-            >
-              <div className='day-activities__hours'><input size={5} maxLength={5} type="text" placeholder='HH:mm' value={a.hours} onChange={(ev) => onActivityUpdated({ ...a, hours: ev.target.value })} /></div>
-              <div className='day-activities__activityName'>{a.activityName}</div>
-              <textarea rows={3} className='day-activities__note' value={a.note} onChange={(ev) => onActivityUpdated({ ...a, note: ev.target.value })} placeholder='Add a note'></textarea>
-              <div className="day-activities__actions">
-                <button onClick={() => onActivityDeleted(a)} className='day-activities__action day-activities__action--delete'>
-                  <FontAwesomeIcon fontSize={'.9rem'} icon={faTrashCan} />
-                </button>
-              </div>
-            </li>
-        )
-        : <p className='noactivities'>No activities for this day!</p>
-    }
-  </ul>;
-}
 
 type DayActivitiesState = DayActivity[];
 
@@ -132,7 +16,8 @@ type DayActivitiesAction =
   | { type: 'add' } & DayActivity
   | { type: 'remove' } & DayActivity
   | { type: 'update' } & DayActivity
-  | { type: 'rearrange' } & ActivityChangedPosition;
+  | { type: 'rearrange' } & ActivityChangedPosition
+  | { type: 'replace' } & { dayActivities: DayActivity[] };
 
 const isTheSameActivity = (a: DayActivity, aTest: DayActivity) => a.dayActivityId === aTest.dayActivityId;
 
@@ -176,6 +61,10 @@ const dailyActivitiesReducer = (state: DayActivitiesState, action: DayActivities
       return newState;
     }
 
+    case 'replace': {
+      return [...action.dayActivities];
+    }
+
     default: {
       throw new Error('Unknown action!');
     }
@@ -199,6 +88,18 @@ function DailyPlanner (props: any, ref: any) {
 
   const { activities } = useActivities();
 
+  useEffect(() => {
+    if (props.nrDays > dailyActivities.length) {
+      return;
+    }
+
+    dispatchDailyActivitiesAction({
+      type: 'replace',
+      dayActivities: dailyActivities.filter(a => a.dayNumber < props.nrDays),
+    });
+
+  }, [props.nrDays]);
+
   useImperativeHandle<ExportData, ExportData>(ref, () => ({
     exportData: () => ({ dailyActivities }),
   }));
@@ -214,6 +115,10 @@ function DailyPlanner (props: any, ref: any) {
     const activityId = ev.dataTransfer.getData('text');
     // TODO: adapt for Backend when the time comes.
     const activity = activities.find(a => +a.id === +activityId);
+
+    if (!activity) {
+      return;
+    }
 
     dispatchDailyActivitiesAction({
       type: 'add',
@@ -248,7 +153,7 @@ function DailyPlanner (props: any, ref: any) {
 
   return (
     <div className="daily-planner">
-      <Days onSelectedDayNumber={setSelectedDayNumber} nrDays={10} />
+      <Days onSelectedDayNumber={setSelectedDayNumber} nrDays={props.nrDays} />
 
       <DayActivities
         onActivityPositionChanged={onActivityPositionChanged}

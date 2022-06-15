@@ -4,8 +4,8 @@ import { axiosInstance, bareAxiosInstance } from "../api/axios";
 import { User } from "../types/user";
 import { useUserAuth } from "./userAuthContext";
 
-const ACCESS_TOKEN_HEADER = 'x-access-token';
-const REFRESH_TOKEN_HEADER = 'x-refresh-token';
+export const ACCESS_TOKEN_HEADER = 'x-access-token';
+export const REFRESH_TOKEN_HEADER = 'x-refresh-token';
 
 const refreshAccessToken = (refreshToken: string, userId: number): Promise<User> => {
     const body = JSON.stringify({ id: userId });

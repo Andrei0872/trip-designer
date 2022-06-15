@@ -1,0 +1,114 @@
+.day-activities {
+  flex-grow: 1;
+  display: flex;
+  list-style: none;
+  flex-direction: column;
+  gap: var(--activities-gap);
+  padding-block-start: 1rem;
+  position: relative;
+  --left-space: 6.1rem;
+  --activities-gap: 1rem;
+
+  &:not([data-is-empty='true'])::after {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 3px;
+    background: var(--color-grecian-blue);
+    top: 0;
+    left: var(--left-space);
+  }
+
+  &__activityName {
+    padding: 1rem;
+    border-radius: 10px;
+    color: whitesmoke;
+    background-color: var(--color-sea);
+  }
+
+  &__activity {
+    display: flex;
+    align-items: center;
+    column-gap: 1rem;
+    padding-inline: 0.5rem;
+    position: relative;
+    cursor: pointer;
+
+    &::after {
+      content: attr(data-index);
+      position: absolute;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      border: 2px solid var(--color-sea);
+      background-color: whitesmoke;
+      color: var(--color-sea);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      left: var(--left-space);
+      transform: translateX(-50%);
+      z-index: 1;
+      font-weight: bold;
+    }
+
+    &[data-has-pointer-entered=true]::before {
+      content: "";
+      width: 100%;
+      position: absolute;
+      height: var(--activities-gap);
+      background-color: lightgray;
+      left: 0;
+      top: 100%;
+      z-index: 2;
+    }
+  }
+
+  &__note {
+    flex-grow: 1;
+    resize: none;
+    padding: .3rem;
+  }
+
+  &__hours {
+    margin-right: 1rem;
+
+    &>input {
+      padding: 0.1rem 0.2rem;
+      text-align: center;
+      margin-right: 1rem;
+    }
+  }
+
+  &__actions {
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  &__action {
+    border: 1px solid gray;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+    place-items: center;
+    font-weight: bold;
+    height: 2rem;
+    width: 2rem;
+
+    &:not(:focus, :active) {
+      outline: none;
+      border: none;
+    }
+
+    &--delete {
+      background-color: var(--color-coral);
+      color: whitesmoke;
+
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+  }
+}

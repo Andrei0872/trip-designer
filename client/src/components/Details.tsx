@@ -4,6 +4,7 @@ import { forwardRef, useImperativeHandle, useRef, useState } from 'react'
 import React from 'react';
 import { ExportData } from '../types/utils';
 import { getFormDataEntriesAsObject } from '../utils';
+import { RawTodo } from '../types/trip';
 
 function Todo({ todo, index, checkTodo, removeTodo } : any) {
   return (
@@ -43,17 +44,54 @@ function TodoForm({addTodo}:any){
   );
 }
 
-function Details (props: any, ref: any) {
-  const [todos, setTodos] = React.useState([
-    { text: "First todo",
-      isCompleted: false},
-    { text: "Second todo",
-    isCompleted: false},
-    { text: "Third todo",
-    isCompleted: false}
-  ]);
+const formatDateForInput = (dateStr: string) => {
+  const shorterStr = new Date(dateStr).toLocaleDateString().split('/');
+
+  let temp = shorterStr[0];
+  shorterStr[0] = shorterStr[2];
+  shorterStr[2] = temp;
+
+  return shorterStr.join('-');
+}
+
+export interface DetailsProps {
+  onDatesChanged?: (arg: { startDate: string, endDate: string }) => void;
+  readonlyData?: {
+    startDate: string;
+    endDate: string;
+    todos: RawTodo[];
+  }
+}
+function Details (props: DetailsProps, ref: any) {
+  const isReadonly = !!props.readonlyData;
+
+  const [todos, setTodos] = React.useState(
+    !isReadonly 
+      ?
+        [
+          { text: "First todo",
+            isCompleted: false},
+          { text: "Second todo",
+          isCompleted: false},
+          { text: "Third todo",
+          isCompleted: false}
+        ]
+      : props.readonlyData.todos
+  );
+
+  const { onDatesChanged = () => {} } = props;
 
   const formRef = useRef(null);
+
+  const startDateRef = useRef<HTMLInputElement>(null);
+  const endDateRef = useRef<HTMLInputElement>(null);
+
+  const onDateChanged = () => {
+    onDatesChanged({
+      startDate: startDateRef.current.value,
+      endDate: endDateRef.current.value,
+    })
+  }
 
   useImperativeHandle<any, ExportData>(ref, () => ({
     exportData: () => {
@@ -69,10 +107,18 @@ function Details (props: any, ref: any) {
   }));
 
   const addTodo = (text: any, isCompleted: boolean) => {
+    if (isReadonly) {
+      return;
+    }
+
     const newTodos = [...todos, { text, isCompleted }];
     setTodos(newTodos);
   };
   const checkTodo = (index: number) => {
+    if (isReadonly) {
+      return;
+    }
+
     const newTodos = [...todos];
     if (newTodos[index].isCompleted)
     {
@@ -86,6 +132,10 @@ function Details (props: any, ref: any) {
   };
 
   const removeTodo = (index: number) => {
+    if (isReadonly) {
+      return;
+    }
+
     const newTodos = [...todos];
     newTodos.splice(index, 1);
     setTodos(newTodos);
@@ -102,8 +152,8 @@ function Details (props: any, ref: any) {
             <p className='details__image__country-city'>USA, Los Angeles</p>
           </div>
           <div className='details__dates'>
-            <abbr title="start date"><input className="details__dates__start" type="date" id="start" name="start_date" defaultValue="2022-05-16"/></abbr>
-            <abbr title="end date"><input className="details__dates__end" type="date" id="end" name="end_date" defaultValue="2022-05-16"/></abbr>
+            <abbr title="start date"><input readOnly={isReadonly} onChange={onDateChanged} ref={startDateRef} className="details__dates__start" type="date" id="start" name="start_date" defaultValue={ isReadonly ? formatDateForInput(props.readonlyData.startDate) : "2022-05-16"}/></abbr>
+            <abbr title="end date"><input readOnly={isReadonly} onChange={onDateChanged} ref={endDateRef} className="details__dates__end" type="date" id="end" name="end_date" defaultValue={ isReadonly ? formatDateForInput(props.readonlyData.endDate) : "2022-05-16"}/></abbr>
           </div>
         </div>
 
