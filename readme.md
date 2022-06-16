@@ -1,8 +1,7 @@
 # Trip Designer
 
-_You can find a **demo** [here](https://drive.google.com/file/d/1OZGymHkSX1Mc9DU1eotJDxAqCb2xcJ2S/view?usp=sharing)._
-
 - [Trip Designer](#trip-designer)
+  - [Demo](#demo)
   - [About our app](#about-our-app)
   - [Prerequisites](#prerequisites)
   - [Getting started](#getting-started)
@@ -23,6 +22,11 @@ _You can find a **demo** [here](https://drive.google.com/file/d/1OZGymHkSX1Mc9DU
     - [Design patterns](#design-patterns)
   - [Visualizing the database with `pgadmin`](#visualizing-the-database-with-pgadmin)
 
+## Demo
+
+A **demo** can be found [here](https://drive.google.com/file/d/1OZGymHkSX1Mc9DU1eotJDxAqCb2xcJ2S/view?usp=sharing).
+
+---
 
 ## About our app
 &emsp; Do you have a passion for travelling but also a passion for being organized? Then we believe we have the perfect app for you!  
