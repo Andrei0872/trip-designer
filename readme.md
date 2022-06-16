@@ -1,5 +1,7 @@
 # Trip Designer
 
+_You can find a **demo** [here](https://drive.google.com/file/d/1OZGymHkSX1Mc9DU1eotJDxAqCb2xcJ2S/view?usp=sharing)._
+
 - [Trip Designer](#trip-designer)
   - [About our app](#about-our-app)
   - [Prerequisites](#prerequisites)
